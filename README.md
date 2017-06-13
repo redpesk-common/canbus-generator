@@ -16,15 +16,15 @@ The reference documentation of the JSON file can be found [here](https://github.
 
 * Make sure you already set up the AGL SDK using the following [SDK Quick Setup Guide](http://docs.iot.bzh/docs/getting_started/en/dev/reference/setup-sdk-environment.html). Alternatively, please refer to official guides available on [AGL Developer Site](http://docs.automotivelinux.org/docs/devguides/en/dev/#guides).
 
-> **CAUTION** Don't source the environment file to get this project compile. We just use CMake from SDK environment, so make sure to not have CMake on the system or remove it if needed with ```sudo apt-get remove cmake```. 
+> **CAUTION** Don't source the environment file to get this project compile. We just use CMake from SDK environment, so make sure to not have CMake on the system or remove it if needed with ```sudo apt-get remove cmake```.
 
 ## Compile
 
 ```bash
 $ export PATH=$PATH:/xdt/sdk/sysroots/x86_64-aglsdk-linux/usr/bin
 $ export WD=$(pwd)
-$ git clone --recursive https://gerrit.automotivelinux.org/gerrit/apps/low-level-can-service
-$ cd can-config-generator
+$ git clone --recursive https://gerrit.automotivelinux.org/gerrit/apps/low-level-can-generator
+$ cd low-level-can-generator
 $ mkdir -p build
 $ cd build
 $ cmake -G "Unix Makefiles" ..
