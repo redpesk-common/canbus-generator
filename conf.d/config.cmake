@@ -56,10 +56,7 @@ set (gcc_minimal_version 4.9)
 
 # PKG_CONFIG required packages
 # -----------------------------
-set (PKG_REQUIRED_LIST
-	json-c
-	libsystemd
-)
+set (PKG_REQUIRED_LIST)
 
 # Static constante definition
 # -----------------------------
