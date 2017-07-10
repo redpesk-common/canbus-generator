@@ -41,4 +41,4 @@ PROJECT_TARGET_ADD(can-config-generator)
 
 	# installation directory
 	INSTALL(TARGETS can-config-generator
-RUNTIME DESTINATION ${BINDINGS_INSTALL_DIR})
+RUNTIME DESTINATION /usr/local/bin)
