@@ -59,16 +59,11 @@ set (gcc_minimal_version 4.9)
 set (PKG_REQUIRED_LIST
 	json-c
 	libsystemd
-	afb-daemon
 )
 
 # Static constante definition
 # -----------------------------
-#add_compile_options()
-
-# LANG Specific compile flags set for all build types
-set(CMAKE_C_FLAGS "" CACHE STRING "C compile flags")
-set(CMAKE_CXX_FLAGS "-std=c++11" CACHE STRING "C++ compile flags")
+add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++11>)
 
 # Print a helper message when every thing is finished
 # ----------------------------------------------------
