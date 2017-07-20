@@ -56,19 +56,11 @@ set (gcc_minimal_version 4.9)
 
 # PKG_CONFIG required packages
 # -----------------------------
-set (PKG_REQUIRED_LIST
-	json-c
-	libsystemd
-	afb-daemon
-)
+set (PKG_REQUIRED_LIST)
 
 # Static constante definition
 # -----------------------------
-#add_compile_options()
-
-# LANG Specific compile flags set for all build types
-set(CMAKE_C_FLAGS "" CACHE STRING "C compile flags")
-set(CMAKE_CXX_FLAGS "-std=c++11" CACHE STRING "C++ compile flags")
+add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++11>)
 
 # Print a helper message when every thing is finished
 # ----------------------------------------------------
@@ -76,7 +68,7 @@ set(CLOSING_MESSAGE "Test with: ./src/can-config-generator -m ../tests/basic.jso
 
 # (BUG!!!) as PKG_CONFIG_PATH does not work [should be an env variable]
 # ---------------------------------------------------------------------
-set(CMAKE_INSTALL_PREFIX $ENV{HOME}/opt)
+# set(CMAKE_INSTALL_PREFIX $ENV{HOME}/opt)
 set(CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX}/lib64/pkgconfig ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 set(LD_LIBRARY_PATH ${CMAKE_INSTALL_PREFIX}/lib64 ${CMAKE_INSTALL_PREFIX}/lib)
 
