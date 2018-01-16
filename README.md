@@ -23,7 +23,7 @@ The reference documentation of the JSON file can be found [here](https://github.
 ```bash
 $ export PATH=$PATH:/xdt/sdk/sysroots/x86_64-aglsdk-linux/usr/bin
 $ export WD=$(pwd)
-$ git clone --recursive https://gerrit.automotivelinux.org/gerrit/apps/low-level-can-generator
+$ git clone --recursive https://gerrit.automotivelinux.org/gerrit/src/low-level-can-generator
 $ cd low-level-can-generator
 $ mkdir -p build
 $ cd build
