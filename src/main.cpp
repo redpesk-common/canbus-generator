@@ -203,7 +203,8 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::diagnostic_mes
 		<< v.line_prefix_ << "\t" << gen(v.v_.frequency()) << ",\n"
 		<< v.line_prefix_ << "\t" << (v.v_.decoder().size() ? v.v_.decoder() : "nullptr") << ",\n"
 		<< v.line_prefix_ << "\t" << (v.v_.callback().size() ? v.v_.callback() : "nullptr") << ",\n"
-		<< v.line_prefix_ << "\t" << "true" << "\n"
+		<< v.line_prefix_ << "\t" << "true" << ",\n"
+		<< v.line_prefix_ << "\t" << "false" << "\n"
 		<< v.line_prefix_ << "})}\n";
 	return o;
 }
