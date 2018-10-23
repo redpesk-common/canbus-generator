@@ -30,9 +30,9 @@ set(PROJECT_ICON "icon.png")
 set(PROJECT_LICENCE "APL2.0")
 set(PROJECT_LANGUAGES,"C")
 
-# Where are stored default templates files from submodule or subtree app-templates in your project tree
+# Where are stored the project configuration files
 # relative to the root project directory
-set(PROJECT_APP_TEMPLATES_DIR "conf.d/app-templates")
+set(PROJECT_CMAKE_CONF_DIR "conf.d")
 
 # Where are stored your external libraries for your project. This is 3rd party library that you don't maintain
 # but used and must be built and linked.
@@ -74,7 +74,7 @@ set(LD_LIBRARY_PATH ${CMAKE_INSTALL_PREFIX}/lib64 ${CMAKE_INSTALL_PREFIX}/lib)
 
 # Optional location for config.xml.in
 # -----------------------------------
-set(WIDGET_CONFIG_TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/conf.d/wgt/config.xml.in)
+#set(WIDGET_CONFIG_TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/conf.d/wgt/config.xml.in)
 
 # Mandatory widget Mimetype specification
 # --------------------------------------------------
@@ -84,7 +84,7 @@ set(WIDGET_CONFIG_TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/conf.d/wgt/config.xml.in)
 # - application/x-executable
 # - text/html
 #
-#set(WIDGET_TYPE None)
+set(WIDGET_TYPE application/x-executable)
 
 # Mandatory Widget entry point file.
 # ----------------------------------------------------
@@ -126,3 +126,11 @@ set(WIDGET_CONFIG_TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/conf.d/wgt/config.xml.in)
 #------------------------------------------------------------
 #set(AFB_TOKEN   ""      CACHE PATH "Default AFB_TOKEN")
 #set(AFB_REMPORT "1234" CACHE PATH "Default AFB_TOKEN")
+
+# This include is mandatory and MUST happens at the end
+# of this file, else you expose you to unexpected behavior
+#
+# This CMake module could be found at the following url:
+# https://gerrit.automotivelinux.org/gerrit/#/admin/projects/src/cmake-apps-module
+# -----------------------------------------------------------
+include(CMakeAfbTemplates)

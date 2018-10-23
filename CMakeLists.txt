@@ -20,10 +20,3 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/conf.d/config.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_APP_TEMPLATES_DIR}/cmake/common.cmake)
-
-# Bindings to compile
-# --------------------
-project_subdirs_add()
-
-project_closing_msg()
