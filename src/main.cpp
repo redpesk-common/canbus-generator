@@ -217,7 +217,8 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::diagnostic_mes
 void generate(const std::string& header, const std::string& footer, const openxc::message_set& message_set, std::ostream& out)
 {
 	out << "#include \"application.hpp\"\n"
-		<< "#include \"../can/can-decoder.hpp\"\n\n";
+		<< "#include \"../can/can-decoder.hpp\"\n"
+		<< "#include \"../can/can-encoder.hpp\"\n\n";
 
 	if (header.size()) out << header << "\n";
 
@@ -269,7 +270,7 @@ void generate(const std::string& header, const std::string& footer, const openxc
 std::string read_file(const std::string& file)
 {
 	if(file.size() == 0) return std::string();
-	
+
 	std::string content;
 	std::ifstream stream(file);
 	if (stream)
@@ -334,7 +335,7 @@ int main(int argc, char *argv[])
 			showhelpinfo(argv[0]);
 			exit(1);
 		}
-		/*use function getopt to get the arguments with option."hu:p:s:v" indicate 
+		/*use function getopt to get the arguments with option."hu:p:s:v" indicate
 		that option h,v are the options without arguments while u,p,s are the
 		options with arguments*/
 		while((tmp=(char)getopt(argc,argv,"m:h:f:o:"))!=-1)
@@ -385,7 +386,7 @@ int main(int argc, char *argv[])
 				throw std::runtime_error(ss.str());
 			}
 		}
-		generate(header.str(), footer, message_set, output_file.size() ? out : std::cout); 
+		generate(header.str(), footer, message_set, output_file.size() ? out : std::cout);
 	}
 	catch (std::exception& e)
 	{
