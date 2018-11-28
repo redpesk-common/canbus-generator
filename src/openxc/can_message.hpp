@@ -22,10 +22,13 @@ namespace openxc
 		float							max_signal_frequency_;
 		bool							force_send_changed_;
 		bool							force_send_changed_signals_;
+		bool				is_fd_;
 
 	public:
 		std::string id() const;
 		void id(const std::string& id);
+		void is_fd(const bool is_fd);
+		bool is_fd() const;
 		std::string	bus() const;
 		bool bit_numbering_inverted() const;
 		const std::vector<signal>& signals() const;

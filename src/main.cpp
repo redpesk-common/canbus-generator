@@ -173,6 +173,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		<< "{std::make_shared<can_message_definition_t>(can_message_definition_t{"
 		<< gen(v.v_.bus()) << ","
 		<< v.v_.id() << ","
+		<< v.v_.is_fd() << ","
 		<< "can_message_format_t::STANDARD,"
 		<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",\n";

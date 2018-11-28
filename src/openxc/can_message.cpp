@@ -17,6 +17,16 @@ namespace openxc
 		return bus_;
 	}
 	
+	void can_message::is_fd(const bool is_fd)
+	{
+		is_fd_ = is_fd;
+	}
+
+	bool can_message::is_fd() const
+	{
+		return is_fd_;
+	}
+
 	bool can_message::bit_numbering_inverted() const
 	{
 		return bit_numbering_inverted_;
@@ -65,6 +75,7 @@ namespace openxc
 	void can_message::from_json(const nlohmann::json& j)
 	{
 		bus_ = j.count("bus") ? j["bus"].get<std::string>() : "";
+		is_fd_ = j.count("is_fd") ? j["is_fd"].get<bool>() : false;
 		bit_numbering_inverted_ = j.count("bit_numbering_inverted") ? j["bit_numbering_inverted"].get<bool>() : false;
 		name_ = j.count("name") ? j["name"].get<std::string>() : "";
 		handlers_ = j.count("handlers") ? j["handlers"].get<std::vector<std::string>>() : std::vector<std::string>();
@@ -96,6 +107,7 @@ namespace openxc
 	{
 		nlohmann::json j;
 		j["bus"] = bus_;
+		j["is_fd"] = is_fd_;
 		j["bit_numbering_inverted"] = bit_numbering_inverted_;
 		j["signals"] = signals_;
 		j["name"] = name_;
