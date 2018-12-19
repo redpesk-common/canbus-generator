@@ -17,28 +17,33 @@
 ###########################################################################
 
 # Add target to project dependency list
-PROJECT_TARGET_ADD(can-config-generator)
+set(TARGET_NAME can-config-generator)
 
-	# Define project Targets
-	add_executable(${TARGET_NAME}
-		main.cpp
-		openxc/message_set.cpp
-		openxc/can_bus.cpp
-		openxc/can_message.cpp
-		openxc/command.cpp
-		openxc/diagnostic_message.cpp
-		openxc/mapping.cpp
-		openxc/signal.cpp)
+# Define project Targets
+add_executable(${TARGET_NAME}
+	main.cpp
+	openxc/message_set.cpp
+	openxc/can_bus.cpp
+	openxc/can_message.cpp
+	openxc/command.cpp
+	openxc/diagnostic_message.cpp
+	openxc/mapping.cpp
+	openxc/signal.cpp)
 
-	TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}
-		PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/json
-	)
+TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/json
+)
 
-	# Library dependencies (include updates automatically)
-	TARGET_LINK_LIBRARIES(can-config-generator
-		${link_libraries}
-	)
+# Library dependencies (include updates automatically)
+TARGET_LINK_LIBRARIES(${TARGET_NAME}
+	${link_libraries}
+)
 
-	# installation directory
-	INSTALL(TARGETS can-config-generator
-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+# installation directory
+INSTALL(TARGETS ${TARGET_NAME}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# Print a helper message when every thing is finished
+# ----------------------------------------------------
+set(CLOSING_MESSAGE "Test with: ./src/can-config-generator -m ../tests/basic.json -o application-generated.cpp")
