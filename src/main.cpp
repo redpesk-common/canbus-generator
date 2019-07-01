@@ -159,7 +159,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		<< v.line_prefix_ << "\t" << gen(v.v_.force_send_changed()) << ",\n"
 		<< gen(v.v_.states(), v.line_prefix_ + '\t') << ",\n"
 		<< v.line_prefix_ << '\t' << gen(v.v_.writable()) << ",\n"
-		<< v.line_prefix_ << '\t' << (v.v_.decoder().size() ? v.v_.decoder() : "nullptr") << ",\n"
+		<< v.line_prefix_ << '\t' << (v.v_.decoder().size() ? v.v_.decoder() : v.v_.states().size() ? "decoder_t::decode_state" : "nullptr") << ",\n"
 		<< v.line_prefix_ << '\t' << (v.v_.encoder().size() ? v.v_.encoder() : "nullptr") << ",\n"
 		<< v.line_prefix_ << '\t' << "false\n"
 		<< v.line_prefix_ << "})}";
