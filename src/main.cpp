@@ -151,7 +151,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position\n"
 		<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"
-		<< v.line_prefix_ << "\t" << v.v_.offset() << ",// offset\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.offset()) << ",// offset\n"
 		<< v.line_prefix_ << "\t" << "0,// min_value\n"
 		<< v.line_prefix_ << "\t" << "0,// max_value\n"
 		<< v.line_prefix_ << "\tfrequency_clock_t(" << gen(v.v_.max_frequency()) << "),// frequency\n"
@@ -168,11 +168,11 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		}else{
 			multi_first = "false";
 		}
-		std::string multi = "std::make_pair<bool, int>(" + multi_first + "," + std::to_string(v.v_.multiplex().second) + ")";
+		std::string multi = "std::make_pair<bool, int>(" + multi_first + ", " + std::to_string(v.v_.multiplex().second) + ")";
 	o	<< v.line_prefix_ << '\t' << multi << ",// multiplex\n"
 		<< v.line_prefix_ << '\t' << v.v_.is_big_endian() << ",// is_big_endian\n"
 		<< v.line_prefix_ << '\t' << v.v_.is_signed() << ",// is_signed\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << ",// unit\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n"
 		<< v.line_prefix_ << "})}";
 	return o;
 }
@@ -200,7 +200,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;
-	o	<< "\t\t\t\t\t{ // beginning signals vector\n";
+	o	<< "\n\t\t\t\t\t{ // beginning signals vector\n";
 			std::uint32_t signal_count = (uint32_t)v.v_.signals().size();
 			for(const openxc::signal& s : v.v_.signals())
 			{
