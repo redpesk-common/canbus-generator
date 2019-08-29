@@ -28,7 +28,9 @@ add_executable(${TARGET_NAME}
 	openxc/command.cpp
 	openxc/diagnostic_message.cpp
 	openxc/mapping.cpp
-	openxc/signal.cpp)
+	openxc/signal.cpp
+	openxc/decoder.cpp
+	)
 
 TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/json

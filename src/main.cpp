@@ -27,6 +27,7 @@
 #include <iterator>
 #include <json.hpp>
 #include "openxc/message_set.hpp"
+#include "openxc/decoder.hpp"
 
 #define EXIT_SUCCESS				0
 #define EXIT_UNKNOWN_ERROR			1
@@ -46,6 +47,11 @@
 #define J1939_ADDR_CLAIM_PROTOCOL 0x0020
 #define ISOTP_PROTOCOL 0x0040
 #define FD_FRAME 0x0800
+
+#define VERSION_LOW_CAN "2.0"
+
+
+std::string VERSION_FILE = "1.0";
 
 template <typename T>
 struct generator
@@ -173,7 +179,9 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		<< v.line_prefix_ << "\t" << gen(v.v_.force_send_changed()) << ",// force_send_changed\n"
 		<< gen(v.v_.states(), v.line_prefix_ + '\t') << ",// states\n"
 		<< v.line_prefix_ << '\t' << gen(v.v_.writable()) << ",// writable\n"
-		<< v.line_prefix_ << '\t' << (v.v_.decoder().size() ? v.v_.decoder() : v.v_.states().size() ? "decoder_t::decode_state" : "nullptr") << ",// decoder\n"
+		<< v.line_prefix_ << '\t' << decoder_t::add_decoder(v.v_.decoder().size() ? v.v_.decoder() : v.v_.states().size() ? "decoder_t::decode_state" : "nullptr"
+			, VERSION_FILE
+			, VERSION_LOW_CAN) << ",// decoder\n"
 		<< v.line_prefix_ << '\t' << (v.v_.encoder().size() ? v.v_.encoder() : "nullptr") << ",// encoder\n"
 		<< v.line_prefix_ << '\t' << "false,// received\n";
 		std::string multi_first = "";
@@ -260,7 +268,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::diagnostic_mes
 		<< v.line_prefix_ << "\t" << 0 << ",\n"
 		<< v.line_prefix_ << "\t" << "UNIT::INVALID" << ",\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.frequency()) << ",\n"
-		<< v.line_prefix_ << "\t" << (v.v_.decoder().size() ? v.v_.decoder() : "nullptr") << ",\n"
+		<< v.line_prefix_ << "\t" << decoder_t::add_decoder((v.v_.decoder().size() ? v.v_.decoder() : "nullptr"),VERSION_FILE,VERSION_LOW_CAN) << ",\n"
 		<< v.line_prefix_ << "\t" << (v.v_.callback().size() ? v.v_.callback() : "nullptr") << ",\n"
 		<< v.line_prefix_ << "\t" << "true" << ",\n"
 		<< v.line_prefix_ << "\t" << "false" << "\n"
@@ -319,6 +327,12 @@ void generate(const std::string& header, const std::string& footer, const openxc
 
 	out	<< "\treturn " << gen(active_bus) << ";\n"
 		<< "}\n\n";
+
+
+	out << decoder_t::apply_patch();
+
+
+
 	out	<< footer << std::endl;
 }
 
@@ -379,6 +393,8 @@ std::cout<<"         "<<"-o application-generated.cpp : output source file. Name
 /// @return Exit code, zero if success.
 int main(int argc, char *argv[])
 {
+
+	decoder_t::init_decoder();
 	try
 	{
 		std::string appName = argv[0];
@@ -445,6 +461,7 @@ int main(int argc, char *argv[])
 				throw std::runtime_error(ss.str());
 			}
 		}
+		VERSION_FILE = message_set.version();
 		generate(header.str(), footer, message_set, output_file.size() ? out : std::cout);
 	}
 	catch (std::exception& e)
