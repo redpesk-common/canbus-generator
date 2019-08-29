@@ -46,6 +46,16 @@ namespace openxc
 		return is_j1939_;
 	}
 
+	void can_message::is_isotp(const bool is_isotp)
+	{
+		is_isotp_ = is_isotp;
+	}
+
+	bool can_message::is_isotp() const
+	{
+		return is_isotp_;
+	}
+
 	bool can_message::bit_numbering_inverted() const
 	{
 		return bit_numbering_inverted_;
@@ -102,6 +112,7 @@ namespace openxc
 		is_fd_ = j.count("is_fd") ? j["is_fd"].get<bool>() : false;
 		is_extended_ = j.count("is_extended") ? j["is_extended"].get<bool>() : false;
 		is_j1939_ = j.count("is_j1939") ? j["is_j1939"].get<bool>() : false;
+		is_isotp_ = j.count("is_isotp") ? j["is_isotp"].get<bool>() : false;
 		bit_numbering_inverted_ = j.count("bit_numbering_inverted") ? j["bit_numbering_inverted"].get<bool>() : false;
 		name_ = j.count("name") ? j["name"].get<std::string>() : "";
 		handlers_ = j.count("handlers") ? j["handlers"].get<std::vector<std::string>>() : std::vector<std::string>();
@@ -135,10 +146,9 @@ namespace openxc
 		nlohmann::json j;
 		j["bus"] = bus_;
 		j["is_fd"] = is_fd_;
-
 		j["is_extended"] = is_extended_;
-
 		j["is_j1939"] = is_j1939_;
+		j["is_isotp"] = is_isotp_;
 		j["bit_numbering_inverted"] = bit_numbering_inverted_;
 		j["signals"] = signals_;
 		j["name"] = name_;
