@@ -1,3 +1,5 @@
+#include <linux/can.h>
+
 #include "can_message.hpp"
 
 namespace openxc
