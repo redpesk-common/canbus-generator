@@ -31,11 +31,6 @@ namespace openxc
 		is_extended_ = is_extended;
 	}
 
-	bool can_message::is_extended() const
-	{
-		return is_extended_;
-	}
-
 	void can_message::is_j1939(const bool is_j1939)
 	{
 		is_j1939_ = is_j1939;

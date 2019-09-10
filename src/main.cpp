@@ -40,13 +40,13 @@
  */
 
 #define INVALID_FLAG 0x0001
-#define STANDARD_ID 0x0002
-#define EXTENDED_ID 0x0004
-#define BCM_PROTOCOL 0x0008
-#define J1939_PROTOCOL 0x0010
-#define J1939_ADDR_CLAIM_PROTOCOL 0x0020
-#define ISOTP_PROTOCOL 0x0040
-#define FD_FRAME 0x0800
+#define BCM_PROTOCOL 0x0002
+#define J1939_PROTOCOL 0x0004
+#define J1939_ADDR_CLAIM_PROTOCOL 0x0008
+#define ISOTP_PROTOCOL 0x0010
+#define ISOTP_SEND 0x0020
+#define ISOTP_RECEIVE 0x0040
+#define FD_FRAME 0x0080
 
 #define VERSION_LOW_CAN "2.0"
 
@@ -223,16 +223,6 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		{
 			flags = flags|ISOTP_PROTOCOL;
 		}
-
-		if(v.v_.is_extended())
-		{
-			flags = flags|EXTENDED_ID;
-		}
-		else
-		{
-			flags = flags|STANDARD_ID;
-		}
-
 
 		if(v.v_.is_fd())
 		{

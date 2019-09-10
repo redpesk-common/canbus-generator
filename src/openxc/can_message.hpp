@@ -23,7 +23,6 @@ namespace openxc
 		bool							force_send_changed_;
 		bool							force_send_changed_signals_;
 		bool							is_fd_;
-		bool							is_extended_;
 		bool							is_j1939_;
 		bool							is_isotp_;
 		uint32_t						length_;
