@@ -98,7 +98,9 @@ namespace openxc
 
 	uint32_t can_message::length() const
 	{
-		return length_;
+		return ! length_ ?
+			CAN_MAX_DLEN :
+			length_;
 	}
 
 	void can_message::from_json(const nlohmann::json& j)
