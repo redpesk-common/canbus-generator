@@ -92,8 +92,14 @@ namespace openxc
 		return is_big_endian_;
 	}
 
-	bool signal::is_signed() const{
-		return is_signed_;
+	sign_t signal::sign() const
+	{
+		return signed_;
+	}
+
+	std::int32_t signal::bit_sign_position() const
+	{
+		return bit_sign_position_;
 	}
 
 	std::string signal::unit() const{
@@ -135,7 +141,8 @@ namespace openxc
 			multiplex_ =  std::make_pair(false,0);
 		}
 		is_big_endian_ = j.count("is_big_endian") ? j["is_big_endian"].get<bool>() : false;
-		is_signed_ = j.count("is_signed") ? j["is_signed"].get<bool>() : false;
+		signed_ = j.count("sign") ? static_cast<sign_t>(j["sign"].get<std::uint32_t>()) : sign_t::UNSIGNED;
+		bit_sign_position_ = j.count("bit_sign_position") ? j["bit_sign_position"].get<std::int32_t>() : -1;
 		unit_ = j.count("unit") ? j["unit"].get<std::string>() : "";
 
 
@@ -188,7 +195,8 @@ namespace openxc
 
 
 		j["is_big_endian"] = is_big_endian_;
-		j["is_signed"] = is_signed_;
+		j["signed"] = signed_;
+		j["bit_sign_position"] = bit_sign_position_;
 		j["unit"] = unit_;
 		return j;
 	}

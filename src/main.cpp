@@ -193,7 +193,8 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		std::string multi = "std::make_pair<bool, int>(" + multi_first + ", " + std::to_string(v.v_.multiplex().second) + ")";
 	o	<< v.line_prefix_ << '\t' << multi << ",// multiplex\n"
 		<< v.line_prefix_ << '\t' << gen(v.v_.is_big_endian()) << ",// is_big_endian\n"
-		<< v.line_prefix_ << '\t' << gen(v.v_.is_signed()) << ",// is_signed\n"
+		<< v.line_prefix_ << '\t' << "static_cast<sign_t>(" << gen(v.v_.sign()) << ")" << ",// signed\n"
+		<< v.line_prefix_ << "\t" << v.v_.bit_sign_position() << ",// bit_sign_position\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n"
 		<< v.line_prefix_ << "})}";
 	return o;

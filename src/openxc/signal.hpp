@@ -8,6 +8,15 @@
 
 namespace openxc
 {
+	enum sign_t
+	{
+		UNSIGNED = 0,
+		SIGN_BIT = 1,
+		ONES_COMPLEMENT = 2,
+		TWOS_COMPLEMENT = 3,
+		SIGN_BIT_EXTERN = 4,
+	};
+
 	class signal
 	{
 	private:
@@ -28,7 +37,8 @@ namespace openxc
 		std::string											encoder_;
 		std::pair<bool,int>									multiplex_;
 		bool												is_big_endian_;
-		bool												is_signed_;
+		sign_t												signed_;
+		std::int32_t										bit_sign_position_;
 		std::string											unit_;
 
 	public:
@@ -50,7 +60,8 @@ namespace openxc
 		std::string encoder() const;
 		std::pair<bool,int> multiplex() const;
 		bool is_big_endian() const;
-		bool is_signed() const;
+		sign_t sign() const;
+		std::int32_t bit_sign_position() const;
 		std::string unit() const;
 
 		void from_json(const nlohmann::json& j);
