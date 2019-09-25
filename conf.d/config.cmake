@@ -48,7 +48,6 @@ add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++11>
 		    -Wno-unused-parameter
 		    -Wno-sign-compare
 		    -Wno-sign-conversion
-		    -Werror=implicit-function-declaration
 		    -ffunction-sections
 		    -fdata-sections
 		    -fPIC
