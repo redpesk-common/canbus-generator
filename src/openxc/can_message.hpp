@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <json.hpp>
+#include <linux/can.h>
 
 #include "signal.hpp"
 
@@ -18,6 +19,7 @@ namespace openxc
 		std::string						name_;
 		std::vector<std::string>		handlers_;
 		bool							enabled_;
+		bool							frame_layout_is_little_;
 		float							max_frequency_;
 		float							max_signal_frequency_;
 		bool							force_send_changed_;
@@ -34,8 +36,6 @@ namespace openxc
 		void id(const std::string& id);
 		void is_fd(const bool is_fd);
 		bool is_fd() const;
-		void is_extended(const bool is_extended);
-		bool is_extended() const;
 		void is_j1939(const bool is_j1939);
 		bool is_j1939() const;
 		void is_isotp(const bool is_isotp);
@@ -46,6 +46,7 @@ namespace openxc
 		std::string name() const;
 		std::vector<std::string> handlers() const;
 		bool enabled() const;
+		bool frame_layout_is_little() const;
 		float max_frequency() const;
 		float max_signal_frequency() const;
 		bool force_send_changed() const;

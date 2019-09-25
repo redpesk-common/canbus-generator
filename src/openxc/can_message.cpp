@@ -28,10 +28,6 @@ namespace openxc
 	{
 		return is_fd_;
 	}
-	void can_message::is_extended(const bool is_extended)
-	{
-		is_extended_ = is_extended;
-	}
 
 	void can_message::is_j1939(const bool is_j1939)
 	{
@@ -78,6 +74,11 @@ namespace openxc
 		return enabled_;
 	}
 
+	bool can_message::frame_layout_is_little() const
+	{
+		return frame_layout_is_little_;
+	}
+
 	float can_message::max_frequency() const
 	{
 		return max_frequency_;
@@ -109,7 +110,6 @@ namespace openxc
 	{
 		bus_ = j.count("bus") ? j["bus"].get<std::string>() : "";
 		is_fd_ = j.count("is_fd") ? j["is_fd"].get<bool>() : false;
-		is_extended_ = j.count("is_extended") ? j["is_extended"].get<bool>() : false;
 		is_j1939_ = j.count("is_j1939") ? j["is_j1939"].get<bool>() : false;
 		is_isotp_ = j.count("is_isotp") ? j["is_isotp"].get<bool>() : false;
 		bit_numbering_inverted_ = j.count("bit_numbering_inverted") ? j["bit_numbering_inverted"].get<bool>() : false;
@@ -121,6 +121,7 @@ namespace openxc
 		force_send_changed_ = j.count("force_send_changed") ? j["force_send_changed"].get<bool>() : true;
 		force_send_changed_signals_ = j.count("force_send_changed_signals") ? j["force_send_changed_signals"].get<bool>() : false;
 		length_ = j.count("length") ? j["length"].get<uint32_t>() : 0;
+		frame_layout_is_little_ = j.count("frame_layout_is_little") ? j["frame_layout_is_little"].get<bool>() : true;
 
 		if(j.count("signals"))
 		{
@@ -145,7 +146,6 @@ namespace openxc
 		nlohmann::json j;
 		j["bus"] = bus_;
 		j["is_fd"] = is_fd_;
-		j["is_extended"] = is_extended_;
 		j["is_j1939"] = is_j1939_;
 		j["is_isotp"] = is_isotp_;
 		j["bit_numbering_inverted"] = bit_numbering_inverted_;
@@ -158,6 +158,7 @@ namespace openxc
 		j["force_send_changed"] = force_send_changed_;
 		j["force_send_changed_signals"] = force_send_changed_signals_;
 		j["length"] = length_;
+		j["frame_layout_is_little"] = frame_layout_is_little_;
 		return j;
 	}
 

@@ -231,7 +231,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		}
 
 		o << gen(flags) << ",";
-
+	o 	<< gen(v.v_.frame_layout_is_little()) << ",";	
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;
