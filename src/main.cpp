@@ -26,6 +26,7 @@
 #include <numeric>
 #include <iterator>
 #include <json.hpp>
+#include <algorithm>
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
 
@@ -129,16 +130,16 @@ template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::message_set>& v)
 {
 	o	<< v.line_prefix_
-		<< "{std::make_shared<message_set_t>(message_set_t{"
+		<< "std::shared_ptr<message_set_t> cms = std::make_shared<message_set_t>(message_set_t{"
 		<< "0,"
 		<< gen(v.v_.name()) << ",\n"
-		<< "\t\t\t{ // beginning message_definition_ vector\n"
-		<< gen(v.v_.messages(), "\t\t\t")
-		<< "\n\t\t}, // end message_definition vector\n"
-		<< "\t\t\t{ // beginning diagnostic_messages_ vector\n"
-		<< gen(v.v_.diagnostic_messages(),"\t\t\t") << "\n"
-		<< "\t\t\t} // end diagnostic_messages_ vector\n"
-		<< "\t\t})} // end message_set entry\n";
+		<< "\t{ // beginning message_definition_ vector\n"
+		<< gen(v.v_.messages(), "\t")
+		<< "\t}, // end message_definition vector\n"
+		<< "\t{ // beginning diagnostic_messages_ vector\n"
+		<< gen(v.v_.diagnostic_messages(),"\t") << "\n"
+		<< "\t} // end diagnostic_messages_ vector\n"
+		<< "}); // end message_set entry\n";
 	return o;
 }
 
@@ -231,21 +232,21 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		}
 
 		o << gen(flags) << ",";
-	o 	<< gen(v.v_.frame_layout_is_little()) << ",";	
+	o 	<< gen(v.v_.frame_layout_is_little()) << ",";
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;
-	o	<< "\n\t\t\t\t\t{ // beginning signals vector\n";
+	o	<< "\n\t\t\t{ // beginning signals vector\n";
 			std::uint32_t signal_count = (uint32_t)v.v_.signals().size();
 			for(const openxc::signal& s : v.v_.signals())
 			{
-	o			<< gen(s, index,"\t\t\t\t\t\t");
+	o			<< gen(s, index,"\t\t\t\t");
 				if (signal_count > 1) o << ',';
 				--signal_count;
 	o			<< '\n';
 			}
-	o	<< "\t\t\t\t\t} // end signals vector\n"
-		<< "\t\t\t\t})} // end message_definition entry\n";
+	o	<< "\t\t\t} // end signals vector\n"
+		<< "\t\t})} // end message_definition entry\n";
 	return o;
 }
 
@@ -274,57 +275,36 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::diagnostic_mes
 /// @param[in] out Stream to write on.
 void generate(const std::string& header, const std::string& footer, const openxc::message_set& message_set, std::ostream& out)
 {
-	out << "#include \"application.hpp\"\n"
-		<< "#include \"../can/can-decoder.hpp\"\n"
-		<< "#include \"../can/can-encoder.hpp\"\n\n";
+	std::string plugin_name = message_set.name();
+	std::for_each(plugin_name.begin(), plugin_name.end(), [](char & c){
+		c = (char) std::tolower(c);
+	});
+	std::replace(plugin_name.begin(), plugin_name.end(), ' ', '-');
+
+	out << "#include <binding/application.hpp>\n"
+		<< "#include <can/can-decoder.hpp>\n"
+		<< "#include <can/can-encoder.hpp>\n\n"
+		<< "extern \"C\" {\n"
+		<< "CTLP_CAPI_REGISTER(\""
+		<< plugin_name
+		<< "\");\n\n";
 
 	if (header.size()) out << header << "\n";
 
-	out	<< "application_t::application_t()\n"
-		<< "	: can_bus_manager_{utils::config_parser_t{\"/etc/dev-mapping.conf\"}}\n"
-		<< "	, message_set_{\n"
-		<< gen(message_set, "\t\t")
-		<< "\t} // end message_set vector\n"
-		<< "{\n"
-		<< "	for(std::shared_ptr<message_set_t> cms: message_set_)\n"
-		<< "	{\n"
-		<< "		std::vector<std::shared_ptr<message_definition_t>> messages_definition = cms->get_messages_definition();\n"
-		<< "		for(std::shared_ptr<message_definition_t> cmd : messages_definition)\n"
-		<< "		{\n"
-		<< "			cmd->set_parent(cms);\n"
-		<< "			std::vector<std::shared_ptr<signal_t>> signals = cmd->get_signals();\n"
-		<< "			for(std::shared_ptr<signal_t> sig: signals)\n"
-		<< "			{\n"
-		<< "				sig->set_parent(cmd);\n"
-		<< "			}\n"
-		<< "		}\n\n"
-		<< "		std::vector<std::shared_ptr<diagnostic_message_t>> diagnostic_messages = cms->get_diagnostic_messages();\n"
-		<< "		for(std::shared_ptr<diagnostic_message_t> dm : diagnostic_messages)\n"
-		<< "		{\n"
-		<< "			dm->set_parent(cms);\n"
-		<< "		}\n"
-		<< "	}\n"
-		<< "		}\n\n"
-		<< "const std::string application_t::get_diagnostic_bus() const\n"
-		<< "{\n";
+	out	<< gen(message_set, "");
 
-		std::string active_bus = "";
-		for (const auto& d : message_set.diagnostic_messages())
-		{
-			if (d.bus().size() == 0) std::cerr << "ERROR: The bus name should be set for each diagnostic message." << std::endl;
-			if (active_bus.size() == 0) active_bus = d.bus();
-			if (active_bus != d.bus()) std::cerr << "ERROR: The bus name should be the same for each diagnostic message." << std::endl;
-		}
-
-	out	<< "\treturn " << gen(active_bus) << ";\n"
-		<< "}\n\n";
-
+	out << "\nCTLP_ONLOAD(plugin, handle) {\n"
+	 << "\tafb_api_t api = (afb_api_t) plugin->api;\n"
+	 << "\tCtlConfigT* CtlConfig = (CtlConfigT*) afb_api_get_userdata(api);\n"
+	 << "\tapplication_t* app = (application_t*) getExternalData(CtlConfig);\n\n"
+	 << "\treturn app->add_message_set(cms);\n"
+	 << "}\n\n";
 
 	out << decoder_t::apply_patch();
 
+	out << footer << std::endl;
 
-
-	out	<< footer << std::endl;
+	out << "}\n";
 }
 
 /// @brief Read whole file content to a string.
