@@ -6,27 +6,27 @@ namespace openxc
 	{
 		return mapping_name_;
 	}
-	
+
 	std::string mapping::bus() const
 	{
 		return bus_;
 	}
-	
+
 	std::string mapping::database() const
 	{
 		return database_;
 	}
-	
+
 	bool mapping::bit_numbering_inverted() const
 	{
 		return bit_numbering_inverted_;
 	}
-	
+
 	bool mapping::enabled() const
 	{
 		return enabled_;
 	}
-	
+
 	void mapping::from_json(const nlohmann::json& j)
 	{
 		mapping_name_ = j.count("mapping") ? j["mapping"].get<std::string>() : "";

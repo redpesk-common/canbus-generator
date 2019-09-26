@@ -6,17 +6,17 @@ namespace openxc
 	{
 		return name_;
 	}
-	
+
 	bool command::enabled() const
 	{
 		return enabled_;
 	}
-	
+
 	std::string command::handler() const
 	{
 		return handler_;
 	}
-	
+
 	void command::from_json(const nlohmann::json& j)
 	{
 		name_ = j.count("name") ? j["name"].get<std::string>() : "";

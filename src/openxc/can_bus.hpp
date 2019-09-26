@@ -29,7 +29,7 @@ namespace openxc
 		bool raw_writable() const;
 		float max_message_frequency() const;
 		bool force_send_changed() const;
-		
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
 	};

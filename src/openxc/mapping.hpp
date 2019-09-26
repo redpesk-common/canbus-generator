@@ -19,7 +19,7 @@ namespace openxc
 		std::string database() const;
 		bool bit_numbering_inverted() const;
 		bool enabled() const;
-		
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
 	};

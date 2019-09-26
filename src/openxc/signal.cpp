@@ -6,79 +6,79 @@ namespace openxc
 	{
 		return id_;
 	}
-	
+
 	void signal::id(const std::string& id)
 	{
 		id_ = id;
 	}
-	
+
 	void id(const std::string& id);
-	
+
 	std::string signal::generic_name() const
 	{
 		return generic_name_;
 	}
-	
+
 	std::uint32_t signal::bit_position() const
 	{
 		return bit_position_;
 	}
-	
+
 	std::uint32_t signal::bit_size() const
 	{
 		return bit_size_;
 	}
-	
+
 	float signal::factor() const
 	{
 		return factor_;
 	}
-	
+
 	float signal::offset() const
 	{
 		return offset_;
 	}
-	
+
 	std::string signal::decoder() const
 	{
 		return decoder_;
 	}
-	
+
 	bool signal::ignore() const
 	{
 		return ignore_;
 	}
-	
+
 	bool signal::enabled() const
 	{
 		return enabled_;
 	}
-	
+
 	const std::map<std::string, std::vector<std::uint32_t>>& signal::states() const
 	{
 		return states_;
 	}
-	
+
 	float signal::max_frequency() const
 	{
 		return max_frequency_;
 	}
-	
+
 	bool signal::send_same() const
 	{
 		return send_same_;
 	}
-	
+
 	bool signal::force_send_changed() const
 	{
 		return force_send_changed_;
 	}
-	
+
 	bool signal::writable() const
 	{
 		return writable_;
 	}
-	
+
 	std::string signal::encoder() const
 	{
 		return encoder_;
@@ -106,7 +106,6 @@ namespace openxc
 		return unit_;
 	}
 
-	
 	void signal::from_json(const nlohmann::json& j)
 	{
 		generic_name_ = j.count("generic_name") ? j["generic_name"].get<std::string>() : "";
@@ -191,9 +190,6 @@ namespace openxc
 		}
 
 		j["multiplex"] = multi;
-
-
-
 		j["is_big_endian"] = is_big_endian_;
 		j["signed"] = signed_;
 		j["bit_sign_position"] = bit_sign_position_;

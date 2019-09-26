@@ -6,42 +6,42 @@ namespace openxc
 	{
 		return bus_;
 	}
-	
+
 	std::uint32_t diagnostic_message::id() const
 	{
 		return id_;
 	}
-	
+
 	std::uint32_t diagnostic_message::mode() const
 	{
 		return mode_;
 	}
-	
+
 	float diagnostic_message::frequency() const
 	{
 		return frequency_;
 	}
-	
+
 	std::uint32_t diagnostic_message::pid() const
 	{
 		return pid_;
 	}
-	
+
 	std::string diagnostic_message::name() const
 	{
 		return name_;
 	}
-	
+
 	std::string diagnostic_message::decoder() const
 	{
 		return decoder_;
 	}
-	
+
 	std::string diagnostic_message::callback() const
 	{
 		return callback_;
 	}
-	
+
 	void diagnostic_message::from_json(const nlohmann::json& j)
 	{
 		bus_ = j.count("bus") ? j["bus"].get<std::string>() : "";

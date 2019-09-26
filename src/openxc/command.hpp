@@ -15,7 +15,7 @@ namespace openxc
 		std::string name() const;
 		bool enabled() const;
 		std::string handler() const;
-		
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
 	};

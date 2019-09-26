@@ -6,32 +6,32 @@ namespace openxc
 	{
 		return controller_;
 	}
-	
+
 	std::uint32_t can_bus::speed() const
 	{
 		return speed_;
 	}
-	
+
 	can_bus_mode can_bus::raw_can_mode() const
 	{
 		return raw_can_mode_;
 	}
-	
+
 	bool can_bus::raw_writable() const
 	{
 		return raw_writable_;
 	}
-	
+
 	float can_bus::max_message_frequency() const
 	{
 		return max_message_frequency_;
 	}
-	
+
 	bool can_bus::force_send_changed() const
 	{
 		return force_send_changed_;
 	}
-	
+
 	void can_bus::from_json(const nlohmann::json& j)
 	{
 		controller_ = j.count("controller") ? j["controller"].get<std::uint32_t>() : 1;
