@@ -27,6 +27,7 @@
 #include <iterator>
 #include <json.hpp>
 #include <algorithm>
+#include <low-can/can-message.hpp>
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
 
@@ -36,21 +37,8 @@
 #define EXIT_PROGRAM_ERROR			3
 
 
-/**
- * FLAGS
- */
-
-#define INVALID_FLAG 0x0001
-#define BCM_PROTOCOL 0x0002
-#define J1939_PROTOCOL 0x0004
-#define J1939_ADDR_CLAIM_PROTOCOL 0x0008
-#define ISOTP_PROTOCOL 0x0010
-#define ISOTP_SEND 0x0020
-#define ISOTP_RECEIVE 0x0040
-#define FD_FRAME 0x0080
 
 #define VERSION_LOW_CAN "2.0"
-
 
 std::string VERSION_FILE = "1.0";
 
@@ -193,7 +181,6 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		}
 		std::string multi = "std::make_pair<bool, int>(" + multi_first + ", " + std::to_string(v.v_.multiplex().second) + ")";
 	o	<< v.line_prefix_ << '\t' << multi << ",// multiplex\n"
-		<< v.line_prefix_ << '\t' << gen(v.v_.is_big_endian()) << ",// is_big_endian\n"
 		<< v.line_prefix_ << '\t' << "static_cast<sign_t>(" << gen(v.v_.sign()) << ")" << ",// signed\n"
 		<< v.line_prefix_ << "\t" << v.v_.bit_sign_position() << ",// bit_sign_position\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n"
@@ -211,28 +198,15 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		<< "\"" << v.v_.name() << "\","
 		<< v.v_.length() << ",";
 		uint32_t flags = 0;
-		if(v.v_.is_fd())
-		{
-			flags = flags|FD_FRAME;
-		}
 
-		if(v.v_.is_j1939())
-		{
-			flags = flags|J1939_PROTOCOL;
-		}
-
-		if(v.v_.is_isotp())
-		{
-			flags = flags|ISOTP_PROTOCOL;
-		}
-
-		if(v.v_.is_fd())
-		{
-			flags = flags|FD_FRAME;
-		}
+		if(v.v_.is_fd())	flags = flags|CAN_PROTOCOL_WITH_FD_FRAME;
+		if(v.v_.is_j1939()) flags = flags|J1939_PROTOCOL;
+		if(v.v_.is_isotp())	flags = flags|ISOTP_PROTOCOL;
+		if(v.v_.byte_frame_is_big_endian())	flags = flags|BYTE_FRAME_IS_BIG_ENDIAN;
+		if(v.v_.bit_position_reversed())	flags = flags|BIT_POSITION_REVERSED;
+		if(v.v_.continental_bit_position())	flags = flags|CONTINENTAL_BIT_POSITION;
 
 		o << gen(flags) << ",";
-	o 	<< gen(v.v_.frame_layout_is_little()) << ",";
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;

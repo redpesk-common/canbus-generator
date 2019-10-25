@@ -36,7 +36,6 @@ namespace openxc
 		bool												writable_;
 		std::string											encoder_;
 		std::pair<bool,int>									multiplex_;
-		bool												is_big_endian_;
 		sign_t												signed_;
 		std::int32_t										bit_sign_position_;
 		std::string											unit_;
@@ -59,7 +58,6 @@ namespace openxc
 		bool writable() const;
 		std::string encoder() const;
 		std::pair<bool,int> multiplex() const;
-		bool is_big_endian() const;
 		sign_t sign() const;
 		std::int32_t bit_sign_position() const;
 		std::string unit() const;

@@ -49,6 +49,21 @@ namespace openxc
 		return is_isotp_;
 	}
 
+	bool can_message::byte_frame_is_big_endian() const
+	{
+		return byte_frame_is_big_endian_;
+	}
+
+	bool can_message::bit_position_reversed() const
+	{
+		return bit_position_reversed_;
+	}
+
+	bool can_message::continental_bit_position() const
+	{
+		return continental_bit_position_;
+	}
+
 	bool can_message::bit_numbering_inverted() const
 	{
 		return bit_numbering_inverted_;
@@ -72,11 +87,6 @@ namespace openxc
 	bool can_message::enabled() const
 	{
 		return enabled_;
-	}
-
-	bool can_message::frame_layout_is_little() const
-	{
-		return frame_layout_is_little_;
 	}
 
 	float can_message::max_frequency() const
@@ -112,6 +122,9 @@ namespace openxc
 		is_fd_ = j.count("is_fd") ? j["is_fd"].get<bool>() : false;
 		is_j1939_ = j.count("is_j1939") ? j["is_j1939"].get<bool>() : false;
 		is_isotp_ = j.count("is_isotp") ? j["is_isotp"].get<bool>() : false;
+		byte_frame_is_big_endian_ = j.count("byte_frame_is_big_endian") ? j["byte_frame_is_big_endian"].get<bool>() : false;
+		bit_position_reversed_ = j.count("bit_position_reversed") ? j["bit_position_reversed"].get<bool>() : false;
+		continental_bit_position_ = j.count("continental_bit_position") ? j["continental_bit_position"].get<bool>() : false;
 		bit_numbering_inverted_ = j.count("bit_numbering_inverted") ? j["bit_numbering_inverted"].get<bool>() : false;
 		name_ = j.count("name") ? j["name"].get<std::string>() : "";
 		handlers_ = j.count("handlers") ? j["handlers"].get<std::vector<std::string>>() : std::vector<std::string>();
@@ -121,7 +134,6 @@ namespace openxc
 		force_send_changed_ = j.count("force_send_changed") ? j["force_send_changed"].get<bool>() : true;
 		force_send_changed_signals_ = j.count("force_send_changed_signals") ? j["force_send_changed_signals"].get<bool>() : false;
 		length_ = j.count("length") ? j["length"].get<uint32_t>() : 0;
-		frame_layout_is_little_ = j.count("frame_layout_is_little") ? j["frame_layout_is_little"].get<bool>() : true;
 
 		if(j.count("signals"))
 		{
@@ -148,6 +160,9 @@ namespace openxc
 		j["is_fd"] = is_fd_;
 		j["is_j1939"] = is_j1939_;
 		j["is_isotp"] = is_isotp_;
+		j["byte_frame_is_big_endian"] = byte_frame_is_big_endian_;
+		j["bit_position_reversed"] = bit_position_reversed_;
+		j["continental_bit_position"] = continental_bit_position_;
 		j["bit_numbering_inverted"] = bit_numbering_inverted_;
 		j["signals"] = signals_;
 		j["name"] = name_;
@@ -158,7 +173,6 @@ namespace openxc
 		j["force_send_changed"] = force_send_changed_;
 		j["force_send_changed_signals"] = force_send_changed_signals_;
 		j["length"] = length_;
-		j["frame_layout_is_little"] = frame_layout_is_little_;
 		return j;
 	}
 

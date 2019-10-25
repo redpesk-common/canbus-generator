@@ -19,7 +19,6 @@ namespace openxc
 		std::string						name_;
 		std::vector<std::string>		handlers_;
 		bool							enabled_;
-		bool							frame_layout_is_little_;
 		float							max_frequency_;
 		float							max_signal_frequency_;
 		bool							force_send_changed_;
@@ -27,6 +26,9 @@ namespace openxc
 		bool							is_fd_;
 		bool							is_j1939_;
 		bool							is_isotp_;
+		bool							byte_frame_is_big_endian_;
+		bool							bit_position_reversed_;
+		bool							continental_bit_position_;
 		uint32_t						length_;
 		float							min_value;
 		float							max_value;
@@ -40,13 +42,15 @@ namespace openxc
 		bool is_j1939() const;
 		void is_isotp(const bool is_isotp);
 		bool is_isotp() const;
+		bool byte_frame_is_big_endian() const;
+		bool bit_position_reversed() const;
+		bool continental_bit_position() const;
 		std::string	bus() const;
 		bool bit_numbering_inverted() const;
 		const std::vector<signal>& signals() const;
 		std::string name() const;
 		std::vector<std::string> handlers() const;
 		bool enabled() const;
-		bool frame_layout_is_little() const;
 		float max_frequency() const;
 		float max_signal_frequency() const;
 		bool force_send_changed() const;
