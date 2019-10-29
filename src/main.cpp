@@ -30,6 +30,7 @@
 #include <low-can/can-message.hpp>
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
+#include "converter.hpp"
 
 #define EXIT_SUCCESS				0
 #define EXIT_UNKNOWN_ERROR			1
@@ -157,8 +158,8 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 {
 	o	<< v.line_prefix_ << "{std::make_shared<signal_t> (signal_t{\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.generic_name()) << ",// generic_name\n"
-		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position\n"
-		<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
+		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position" << (v.v_.bit_position_edited() ? " edited with low-can-generator\n" : "\n");
+	o	<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.offset()) << ",// offset\n"
 		<< v.line_prefix_ << "\t" << "0,// min_value\n"
@@ -214,6 +215,20 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 			std::uint32_t signal_count = (uint32_t)v.v_.signals().size();
 			for(const openxc::signal& s : v.v_.signals())
 			{
+				openxc::signal& s_tmp = const_cast<openxc::signal&>(s);
+				if(v.v_.bit_position_reversed())
+				{
+					s_tmp.set_bit_position(
+						converter_t::bit_position_swap(v.v_.length(), s.bit_position(), s.bit_size())
+					);
+				}
+				if(v.v_.continental_bit_position())
+				{
+					s_tmp.set_bit_position(
+						converter_t::continental_bit_position_mess(v.v_.length(), s.bit_position(), s.bit_size())
+					);
+				}
+
 	o			<< gen(s, index,"\t\t\t\t");
 				if (signal_count > 1) o << ',';
 				--signal_count;

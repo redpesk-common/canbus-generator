@@ -23,6 +23,7 @@ namespace openxc
 		std::string											id_;
 		std::string											generic_name_;
 		std::uint32_t										bit_position_;
+		bool 												bit_position_edited_;
 		std::uint32_t										bit_size_;
 		float												factor_;
 		float												offset_;
@@ -45,6 +46,7 @@ namespace openxc
 		void id(const std::string& id);
 		std::string generic_name() const;
 		std::uint32_t bit_position() const;
+		bool bit_position_edited() const;
 		std::uint32_t bit_size() const;
 		float factor() const;
 		float offset() const;
@@ -61,6 +63,8 @@ namespace openxc
 		sign_t sign() const;
 		std::int32_t bit_sign_position() const;
 		std::string unit() const;
+
+		void set_bit_position(std::uint32_t new_bit_position);
 
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;

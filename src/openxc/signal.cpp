@@ -24,6 +24,11 @@ namespace openxc
 		return bit_position_;
 	}
 
+	bool signal::bit_position_edited() const
+	{
+		return bit_position_edited_;
+	}
+
 	std::uint32_t signal::bit_size() const
 	{
 		return bit_size_;
@@ -102,10 +107,17 @@ namespace openxc
 		return unit_;
 	}
 
+	void signal::set_bit_position(std::uint32_t new_bit_position)
+	{
+		bit_position_ = new_bit_position;
+		bit_position_edited_ = true;
+	}
+
 	void signal::from_json(const nlohmann::json& j)
 	{
 		generic_name_ = j.count("generic_name") ? j["generic_name"].get<std::string>() : "";
 		bit_position_ = j.count("bit_position") ? j["bit_position"].get<std::uint32_t>() : 0;
+		bit_position_edited_ = false;
 		bit_size_ = j.count("bit_size") ? j["bit_size"].get<std::uint32_t>() : 0;
 		factor_ = j.count("factor") ? j["factor"].get<float>() : 1.0f;
 		offset_ = j.count("offset") ? j["offset"].get<float>() : 0.0f;

@@ -21,6 +21,7 @@ set(TARGET_NAME can-config-generator)
 
 # Define project Targets
 add_executable(${TARGET_NAME}
+	converter.cpp
 	main.cpp
 	openxc/message_set.cpp
 	openxc/can_bus.cpp
