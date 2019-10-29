@@ -204,8 +204,6 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		if(v.v_.is_j1939()) flags = flags|J1939_PROTOCOL;
 		if(v.v_.is_isotp())	flags = flags|ISOTP_PROTOCOL;
 		if(v.v_.byte_frame_is_big_endian())	flags = flags|BYTE_FRAME_IS_BIG_ENDIAN;
-		if(v.v_.bit_position_reversed())	flags = flags|BIT_POSITION_REVERSED;
-		if(v.v_.continental_bit_position())	flags = flags|CONTINENTAL_BIT_POSITION;
 
 		o << gen(flags) << ",";
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
