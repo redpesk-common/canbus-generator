@@ -109,16 +109,16 @@ template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::message_set>& v)
 {
 	o	<< v.line_prefix_
-		<< "{std::make_shared<can_message_set_t>(can_message_set_t{"
+		<< "{std::make_shared<message_set_t>(message_set_t{"
 		<< "0,"
 		<< gen(v.v_.name()) << ",\n"
-		<< "\t\t\t{ // beginning can_message_definition_ vector\n"
+		<< "\t\t\t{ // beginning message_definition_ vector\n"
 		<< gen(v.v_.messages(), "\t\t\t")
-		<< "\n\t\t}, // end can_message_definition vector\n"
+		<< "\n\t\t}, // end message_definition vector\n"
 		<< "\t\t\t{ // beginning diagnostic_messages_ vector\n"
 		<< gen(v.v_.diagnostic_messages(),"\t\t\t") << "\n"
 		<< "\t\t\t} // end diagnostic_messages_ vector\n"
-		<< "\t\t})} // end can_message_set entry\n";
+		<< "\t\t})} // end message_set entry\n";
 	return o;
 }
 
@@ -146,22 +146,33 @@ std::ostream& operator<<(std::ostream& o, const generator<std::map<std::string, 
 template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 {
-	o	<< v.line_prefix_ << "{std::make_shared<can_signal_t> (can_signal_t{\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.generic_name()) << ",\n"
-		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",\n"
-		<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",\n"
-		<< v.line_prefix_ << "\t" << v.v_.offset() << ",\n"
-		<< v.line_prefix_ << "\t" << "0,\n"
-		<< v.line_prefix_ << "\t" << "0,\n"
-		<< v.line_prefix_ << "\tfrequency_clock_t(" << gen(v.v_.max_frequency()) << "),\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.send_same()) << ",\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.force_send_changed()) << ",\n"
-		<< gen(v.v_.states(), v.line_prefix_ + '\t') << ",\n"
-		<< v.line_prefix_ << '\t' << gen(v.v_.writable()) << ",\n"
-		<< v.line_prefix_ << '\t' << (v.v_.decoder().size() ? v.v_.decoder() : v.v_.states().size() ? "decoder_t::decode_state" : "nullptr") << ",\n"
-		<< v.line_prefix_ << '\t' << (v.v_.encoder().size() ? v.v_.encoder() : "nullptr") << ",\n"
-		<< v.line_prefix_ << '\t' << "false\n"
+	o	<< v.line_prefix_ << "{std::make_shared<signal_t> (signal_t{\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.generic_name()) << ",// generic_name\n"
+		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position\n"
+		<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"
+		<< v.line_prefix_ << "\t" << v.v_.offset() << ",// offset\n"
+		<< v.line_prefix_ << "\t" << "0,// min_value\n"
+		<< v.line_prefix_ << "\t" << "0,// max_value\n"
+		<< v.line_prefix_ << "\tfrequency_clock_t(" << gen(v.v_.max_frequency()) << "),// frequency\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.send_same()) << ",// send_same\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.force_send_changed()) << ",// force_send_changed\n"
+		<< gen(v.v_.states(), v.line_prefix_ + '\t') << ",// states\n"
+		<< v.line_prefix_ << '\t' << gen(v.v_.writable()) << ",// writable\n"
+		<< v.line_prefix_ << '\t' << (v.v_.decoder().size() ? v.v_.decoder() : v.v_.states().size() ? "decoder_t::decode_state" : "nullptr") << ",// decoder\n"
+		<< v.line_prefix_ << '\t' << (v.v_.encoder().size() ? v.v_.encoder() : "nullptr") << ",// encoder\n"
+		<< v.line_prefix_ << '\t' << "false,// received\n";
+		std::string multi_first = "";
+		if(v.v_.multiplex().first){
+			multi_first = "true";
+		}else{
+			multi_first = "false";
+		}
+		std::string multi = "std::make_pair<bool, int>(" + multi_first + "," + std::to_string(v.v_.multiplex().second) + ")";
+	o	<< v.line_prefix_ << '\t' << multi << ",// multiplex\n"
+		<< v.line_prefix_ << '\t' << v.v_.is_big_endian() << ",// is_big_endian\n"
+		<< v.line_prefix_ << '\t' << v.v_.is_signed() << ",// is_signed\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << ",// unit\n"
 		<< v.line_prefix_ << "})}";
 	return o;
 }
@@ -170,15 +181,26 @@ template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& v)
 {
 	o	<< v.line_prefix_
-		<< "{std::make_shared<can_message_definition_t>(can_message_definition_t{"
+		<< "{std::make_shared<message_definition_t>(message_definition_t{"
 		<< gen(v.v_.bus()) << ","
 		<< v.v_.id() << ","
-		<< v.v_.is_fd() << ","
-		<< "can_message_format_t::STANDARD,"
-		<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
-		<< gen(v.v_.force_send_changed()) << ",\n";
+		<< "\"" << v.v_.name() << "\","
+		<< v.v_.length() << ","
+		<< gen(v.v_.is_fd()) << ",";
+		if(v.v_.is_j1939()){
+			o << "message_format_t::J1939,";
+		}
+		else if(v.v_.is_extended())
+		{
+			o << "message_format_t::EXTENDED,";
+		}
+		else{
+			o << "message_format_t::STANDARD,";
+		}
+	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
+		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;
-	o	<< "\t\t\t\t\t{ // beginning can_signals vector\n";
+	o	<< "\t\t\t\t\t{ // beginning signals vector\n";
 			std::uint32_t signal_count = (uint32_t)v.v_.signals().size();
 			for(const openxc::signal& s : v.v_.signals())
 			{
@@ -187,8 +209,8 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 				--signal_count;
 	o			<< '\n';
 			}
-	o	<< "\t\t\t\t\t} // end can_signals vector\n"
-		<< "\t\t\t\t})} // end can_message_definition entry\n";
+	o	<< "\t\t\t\t\t} // end signals vector\n"
+		<< "\t\t\t\t})} // end message_definition entry\n";
 	return o;
 }
 
@@ -225,26 +247,26 @@ void generate(const std::string& header, const std::string& footer, const openxc
 
 	out	<< "application_t::application_t()\n"
 		<< "	: can_bus_manager_{utils::config_parser_t{\"/etc/dev-mapping.conf\"}}\n"
-		<< "	, can_message_set_{\n"
+		<< "	, message_set_{\n"
 		<< gen(message_set, "\t\t")
-		<< "\t} // end can_message_set vector\n"
+		<< "\t} // end message_set vector\n"
 		<< "{\n"
-		<< "	for(auto& cms: can_message_set_)\n"
+		<< "	for(std::shared_ptr<message_set_t> cms: message_set_)\n"
 		<< "	{\n"
-		<< "		std::vector<std::shared_ptr<can_message_definition_t> >& can_messages_definition = cms->get_can_message_definition();\n"
-		<< "		for(auto& cmd : can_messages_definition)\n"
+		<< "		std::vector<std::shared_ptr<message_definition_t>> messages_definition = cms->get_messages_definition();\n"
+		<< "		for(std::shared_ptr<message_definition_t> cmd : messages_definition)\n"
 		<< "		{\n"
-		<< "			cmd->set_parent(cms.get());\n"
-		<< "			std::vector<std::shared_ptr<can_signal_t> >& can_signals = cmd->get_can_signals();\n"
-		<< "			for(auto& sig: can_signals)\n"
+		<< "			cmd->set_parent(cms);\n"
+		<< "			std::vector<std::shared_ptr<signal_t>> signals = cmd->get_signals();\n"
+		<< "			for(std::shared_ptr<signal_t> sig: signals)\n"
 		<< "			{\n"
-		<< "				sig->set_parent(cmd.get());\n"
+		<< "				sig->set_parent(cmd);\n"
 		<< "			}\n"
 		<< "		}\n\n"
-		<< "		std::vector<std::shared_ptr<diagnostic_message_t> >& diagnostic_messages = cms->get_diagnostic_messages();\n"
-		<< "		for(auto& dm : diagnostic_messages)\n"
+		<< "		std::vector<std::shared_ptr<diagnostic_message_t>> diagnostic_messages = cms->get_diagnostic_messages();\n"
+		<< "		for(std::shared_ptr<diagnostic_message_t> dm : diagnostic_messages)\n"
 		<< "		{\n"
-		<< "			dm->set_parent(cms.get());\n"
+		<< "			dm->set_parent(cms);\n"
 		<< "		}\n"
 		<< "	}\n"
 		<< "		}\n\n"

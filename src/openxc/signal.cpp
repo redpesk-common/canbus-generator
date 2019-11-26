@@ -83,6 +83,23 @@ namespace openxc
 	{
 		return encoder_;
 	}
+
+	std::pair<bool,int> signal::multiplex() const{
+		return multiplex_;
+	}
+
+	bool signal::is_big_endian() const{
+		return is_big_endian_;
+	}
+
+	bool signal::is_signed() const{
+		return is_signed_;
+	}
+
+	std::string signal::unit() const{
+		return unit_;
+	}
+
 	
 	void signal::from_json(const nlohmann::json& j)
 	{
@@ -99,6 +116,29 @@ namespace openxc
 		force_send_changed_ = j.count("force_send_changed") ? j["force_send_changed"].get<bool>() : false;
 		writable_ = j.count("writable") ? j["writable"].get<bool>() : false;
 		encoder_ = j.count("encoder") ? j["encoder"].get<std::string>() : "";
+		if(j.count("multiplex"))
+		{
+			std::string mult = j["multiplex"].get<std::string>();
+			bool first = false;
+			int second = 0 ;
+			if(mult.compare("Multiplexor") == 0){
+				first = true;
+			}
+			else if (mult.compare("") != 0)
+			{
+				second = std::stoi(mult);
+			}
+			multiplex_ = std::make_pair(first,second);
+		}
+		else
+		{
+			multiplex_ =  std::make_pair(false,0);
+		}
+		is_big_endian_ = j.count("is_big_endian") ? j["is_big_endian"].get<bool>() : false;
+		is_signed_ = j.count("is_signed") ? j["is_signed"].get<bool>() : false;
+		unit_ = j.count("unit") ? j["unit"].get<std::string>() : "";
+
+
 
 		if (j.count("states"))
 		{
@@ -127,6 +167,29 @@ namespace openxc
 		j["force_send_changed"] = force_send_changed_;
 		j["writable"] = writable_;
 		j["encoder"] = encoder_;
+
+		std::string multi = "";
+
+		if(multiplex_.first)
+		{
+			multi = "Multiplexor";
+		}
+		else if(multiplex_.second != 0)
+		{
+			multi = std::to_string(multiplex_.second);
+		}
+		else
+		{
+			multi = "";
+		}
+
+		j["multiplex"] = multi;
+
+
+
+		j["is_big_endian"] = is_big_endian_;
+		j["is_signed"] = is_signed_;
+		j["unit"] = unit_;
 		return j;
 	}
 

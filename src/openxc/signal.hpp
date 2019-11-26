@@ -21,11 +21,16 @@ namespace openxc
 		bool												ignore_;
 		bool												enabled_;
 		std::map<std::string, std::vector<std::uint32_t>>	states_;
-		float										max_frequency_;
+		float												max_frequency_;
 		bool												send_same_;
 		bool												force_send_changed_;
 		bool												writable_;
 		std::string											encoder_;
+		std::pair<bool,int>									multiplex_;
+		bool												is_big_endian_;
+		bool												is_signed_;
+		std::string											unit_;
+
 	public:
 		std::string id() const;
 		void id(const std::string& id);
@@ -43,7 +48,11 @@ namespace openxc
 		bool force_send_changed() const;
 		bool writable() const;
 		std::string encoder() const;
-		
+		std::pair<bool,int> multiplex() const;
+		bool is_big_endian() const;
+		bool is_signed() const;
+		std::string unit() const;
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
 	};

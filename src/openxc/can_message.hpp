@@ -22,13 +22,22 @@ namespace openxc
 		float							max_signal_frequency_;
 		bool							force_send_changed_;
 		bool							force_send_changed_signals_;
-		bool				is_fd_;
+		bool							is_fd_;
+		bool							is_extended_;
+		bool							is_j1939_;
+		uint32_t						length_;
+		float							min_value;
+		float							max_value;
 
 	public:
 		std::string id() const;
 		void id(const std::string& id);
 		void is_fd(const bool is_fd);
 		bool is_fd() const;
+		void is_extended(const bool is_extended);
+		bool is_extended() const;
+		void is_j1939(const bool is_j1939);
+		bool is_j1939() const;
 		std::string	bus() const;
 		bool bit_numbering_inverted() const;
 		const std::vector<signal>& signals() const;
@@ -39,10 +48,11 @@ namespace openxc
 		float max_signal_frequency() const;
 		bool force_send_changed() const;
 		bool force_send_changed_signals() const;
-		
+		uint32_t length() const;
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
-		
+
 		std::uint32_t get_signals_count() const;
 	};
 
