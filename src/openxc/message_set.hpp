@@ -17,6 +17,7 @@ namespace openxc
 	{
 	private:
 		std::string							name_;
+		std::string							version_;
 		bool								bit_numbering_inverted_;
 		float								max_message_frequency_;
 		can_bus_mode						raw_can_mode_;
@@ -35,8 +36,9 @@ namespace openxc
 		message_set();
 		message_set(const message_set&) = default;
 		message_set(message_set&&) = default;
-		
+
 		std::string name() const;
+		std::string version() const;
 		bool bit_numbering_inverted() const;
 		float max_message_frequency() const;
 		can_bus_mode raw_can_mode() const;
@@ -49,7 +51,7 @@ namespace openxc
 		const std::vector<mapping>& mappings() const;
 		const std::vector<std::string>& extra_sources() const;
 		const std::vector<command>& commands() const;
-		
+
 		void from_json(const nlohmann::json& j);
 		nlohmann::json to_json() const;
 	};
