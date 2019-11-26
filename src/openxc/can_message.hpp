@@ -25,6 +25,7 @@ namespace openxc
 		bool							is_fd_;
 		bool							is_extended_;
 		bool							is_j1939_;
+		bool							is_isotp_;
 		uint32_t						length_;
 		float							min_value;
 		float							max_value;
@@ -38,6 +39,8 @@ namespace openxc
 		bool is_extended() const;
 		void is_j1939(const bool is_j1939);
 		bool is_j1939() const;
+		void is_isotp(const bool is_isotp);
+		bool is_isotp() const;
 		std::string	bus() const;
 		bool bit_numbering_inverted() const;
 		const std::vector<signal>& signals() const;

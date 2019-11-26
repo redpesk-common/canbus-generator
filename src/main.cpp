@@ -33,6 +33,20 @@
 #define EXIT_COMMAND_LINE_ERROR		2
 #define EXIT_PROGRAM_ERROR			3
 
+
+/**
+ * FLAGS
+ */
+
+#define INVALID_FLAG 0x0001
+#define STANDARD_ID 0x0002
+#define EXTENDED_ID 0x0004
+#define BCM_PROTOCOL 0x0008
+#define J1939_PROTOCOL 0x0010
+#define J1939_ADDR_CLAIM_PROTOCOL 0x0020
+#define ISOTP_PROTOCOL 0x0040
+#define FD_FRAME 0x0800
+
 template <typename T>
 struct generator
 {
@@ -185,18 +199,40 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::can_message>& 
 		<< gen(v.v_.bus()) << ","
 		<< v.v_.id() << ","
 		<< "\"" << v.v_.name() << "\","
-		<< v.v_.length() << ","
-		<< gen(v.v_.is_fd()) << ",";
-		if(v.v_.is_j1939()){
-			o << "message_format_t::J1939,";
-		}
-		else if(v.v_.is_extended())
+		<< v.v_.length() << ",";
+		uint32_t flags = 0;
+		if(v.v_.is_fd())
 		{
-			o << "message_format_t::EXTENDED,";
+			flags = flags|FD_FRAME;
 		}
-		else{
-			o << "message_format_t::STANDARD,";
+
+		if(v.v_.is_j1939())
+		{
+			flags = flags|J1939_PROTOCOL;
 		}
+
+		if(v.v_.is_isotp())
+		{
+			flags = flags|ISOTP_PROTOCOL;
+		}
+
+		if(v.v_.is_extended())
+		{
+			flags = flags|EXTENDED_ID;
+		}
+		else
+		{
+			flags = flags|STANDARD_ID;
+		}
+
+
+		if(v.v_.is_fd())
+		{
+			flags = flags|FD_FRAME;
+		}
+
+		o << gen(flags) << ",";
+
 	o	<< "frequency_clock_t(" << gen(v.v_.max_frequency()) << "),"
 		<< gen(v.v_.force_send_changed()) << ",";
 		std::uint32_t index = 0;
