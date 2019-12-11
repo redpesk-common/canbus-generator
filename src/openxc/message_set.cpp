@@ -115,7 +115,9 @@ namespace openxc
 			for(const std::map<std::string, nlohmann::json>::value_type& m : messages)
 			{
 				can_message cm = m.second.get<can_message>();
-				cm.id(m.first);
+				std::string id = m.first;
+				id = id.substr(0,id.find("#"));
+				cm.id(id);
 				messages_.push_back(cm);
 			}
 		}
