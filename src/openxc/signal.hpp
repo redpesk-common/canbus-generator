@@ -27,6 +27,9 @@ namespace openxc
 		std::uint32_t										bit_size_;
 		float												factor_;
 		float												offset_;
+		float												min_value_;
+		float												max_value_;
+		float												value_to_match_;
 		std::string											decoder_;
 		bool												ignore_;
 		bool												enabled_;
@@ -50,6 +53,9 @@ namespace openxc
 		std::uint32_t bit_size() const;
 		float factor() const;
 		float offset() const;
+		float min_value() const;
+		float max_value() const;
+		float value_to_match() const;
 		std::string decoder() const;
 		bool ignore() const;
 		bool enabled() const;

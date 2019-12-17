@@ -44,6 +44,21 @@ namespace openxc
 		return offset_;
 	}
 
+	float signal::min_value() const
+	{
+		return min_value_;
+	}
+
+	float signal::max_value() const
+	{
+		return max_value_;
+	}
+
+	float signal::value_to_match() const
+	{
+		return value_to_match_;
+	}
+
 	std::string signal::decoder() const
 	{
 		return decoder_;
@@ -121,6 +136,9 @@ namespace openxc
 		bit_size_ = j.count("bit_size") ? j["bit_size"].get<std::uint32_t>() : 0;
 		factor_ = j.count("factor") ? j["factor"].get<float>() : 1.0f;
 		offset_ = j.count("offset") ? j["offset"].get<float>() : 0.0f;
+		value_to_match_ = j.count("value_to_match") ? j["value_to_match"].get<float>() : -1.0f;
+		min_value_ = j.count("min_value") ? j["max_value"].get<float>() : 0;
+		max_value_ = j.count("max_value") ? j["max_value"].get<float>() : 0;
 		decoder_ = j.count("decoder") ? j["decoder"].get<std::string>() : "";
 		ignore_ = j.count("ignore") ? j["ignore"].get<bool>() : false;
 		enabled_ = j.count("enabled") ? j["enabled"].get<bool>() : true;
@@ -171,6 +189,9 @@ namespace openxc
 		j["bit_size"] = bit_size_;
 		j["factor"] = factor_;
 		j["offset"] = offset_;
+		j["value_to_match"] = min_value_;
+		j["value_to_match"] = max_value_;
+		j["value_to_match"] = value_to_match_;
 		j["decoder"] = decoder_;
 		j["ignore"] = ignore_;
 		j["enabled"] = enabled_;

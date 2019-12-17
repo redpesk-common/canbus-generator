@@ -161,10 +161,38 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position" << (v.v_.bit_position_edited() ? " edited with low-can-generator\n" : "\n");
 	o	<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.offset()) << ",// offset\n"
-		<< v.line_prefix_ << "\t" << "0,// min_value\n"
-		<< v.line_prefix_ << "\t" << "0,// max_value\n"
-		<< v.line_prefix_ << "\tfrequency_clock_t(" << gen(v.v_.max_frequency()) << "),// frequency\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.offset()) << ",// offset\n";
+
+		float min_value = std::nanf("");
+		float max_value = std::nanf("");
+		if(v.v_.min_value() != 0 || v.v_.max_value() != 0 || v.v_.value_to_match() != -1)
+		{
+			if(v.v_.min_value() != 0)
+			{
+				min_value == v.v_.min_value();
+			}
+
+			if(v.v_.max_value() != 0)
+			{
+				max_value == v.v_.max_value();
+			}
+
+			if(v.v_.value_to_match() != -1)
+			{
+				min_value = v.v_.value_to_match();
+				max_value = v.v_.value_to_match();
+			}
+			o << v.line_prefix_ << "\t" << gen(min_value) << ",// min_value\n"
+			<< v.line_prefix_ << "\t" << gen(max_value) <<",// max_value\n";
+		}
+		else
+		{
+			o << v.line_prefix_ << "\t" << "std::nanf(\"\")" << ",// min_value\n"
+			<< v.line_prefix_ << "\t" << "std::nanf(\"\")" <<",// max_value\n";
+		}
+
+
+		o << v.line_prefix_ << "\tfrequency_clock_t(" << gen(v.v_.max_frequency()) << "),// frequency\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.send_same()) << ",// send_same\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.force_send_changed()) << ",// force_send_changed\n"
 		<< gen(v.v_.states(), v.line_prefix_ + '\t') << ",// states\n"

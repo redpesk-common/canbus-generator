@@ -30,8 +30,6 @@ namespace openxc
 		bool							bit_position_reversed_;
 		bool							continental_bit_position_;
 		uint32_t						length_;
-		float							min_value;
-		float							max_value;
 
 	public:
 		std::string id() const;
