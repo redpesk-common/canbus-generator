@@ -2,4 +2,4 @@
 host=gerrit.automotivelinux.org
 port=29418
 project=src/low-level-can-generator
-defaultbranch=master
+defaultbranch=icefish
