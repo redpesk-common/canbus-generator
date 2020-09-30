@@ -268,9 +268,10 @@ void generate(const std::string& header, const std::string& footer, const openxc
 	});
 	std::replace(plugin_name.begin(), plugin_name.end(), ' ', '-');
 
-	out << "#include <binding/application.hpp>\n"
-		<< "#include <can/can-decoder.hpp>\n"
-		<< "#include <can/can-encoder.hpp>\n\n"
+	out << "#include <low-can/binding/application.hpp>\n"
+		<< "#include <low-can/can/can-decoder.hpp>\n"
+		<< "#include <low-can/can/can-encoder.hpp>\n\n"
+		<< "#include <ctl-config.h>\n\n"
 		<< "extern \"C\" {\n"
 		<< "CTLP_CAPI_REGISTER(\""
 		<< plugin_name
