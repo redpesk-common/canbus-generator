@@ -271,13 +271,14 @@ void generate(const std::string& header, const std::string& footer, const openxc
 	out << "#include <low-can/binding/application.hpp>\n"
 		<< "#include <low-can/can/can-decoder.hpp>\n"
 		<< "#include <low-can/can/can-encoder.hpp>\n\n"
-		<< "#include <ctl-config.h>\n\n"
-		<< "extern \"C\" {\n"
+		<< "#include <ctl-config.h>\n\n";
+
+	if (header.size()) out << header << "\n";
+
+	out << "extern \"C\" {\n"
 		<< "CTLP_CAPI_REGISTER(\""
 		<< plugin_name
 		<< "\");\n\n";
-
-	if (header.size()) out << header << "\n";
 
 	out	<< gen(message_set, "");
 
