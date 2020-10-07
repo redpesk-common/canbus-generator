@@ -21,11 +21,14 @@ std::string decoder_t::add_decoder(std::string decoder, std::string version_file
     {
         std::string key = "decoder_t::";
         std::size_t pos = decoder.find(key);
-        std::string decoder_split =  decoder.substr(pos+key.size()); // only name of decoder
+        std::string decoder_split = decoder;
+        if(pos != std::string::npos)
+            decoder_split =  decoder.substr(pos+key.size()); // only name of decoder
 
         if ( decoder_t::decoders_states_.find(decoder_split) == decoder_t::decoders_states_.end() ) { // Not found signal
             decoder_t::decoders_states_.insert(pair_decoder(decoder_split,states::NEW));
-            std::string ret = key + decoder_t::patch_version(decoder_split,version_file,version_low_can);
+            std::string ret = (pos != std::string::npos) ? key + decoder_t::patch_version(decoder_split,version_file,version_low_can) :
+                                                            decoder_t::patch_version(decoder_split,version_file,version_low_can);
             decoder_t::decoders_states_[decoder_split] = states::PROCESSED;
             return ret;
         }
@@ -33,7 +36,8 @@ std::string decoder_t::add_decoder(std::string decoder, std::string version_file
         {
             if(decoder_t::decoders_states_[decoder_split] == states::PROCESSED)
             {
-                return key + decoder_t::patch_version(decoder_split,version_file,version_low_can);
+                return (pos != std::string::npos) ? key + decoder_t::patch_version(decoder_split,version_file,version_low_can) : 
+                                                    decoder_t::patch_version(decoder_split,version_file,version_low_can);
             }
         }
     }
