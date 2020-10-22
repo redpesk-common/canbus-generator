@@ -92,9 +92,17 @@ namespace openxc
 	}
 
 	void message_set::from_json(const nlohmann::json& j)
-	{
+	{	
+		if(!j.count("name")){
+			throw std::runtime_error("No name set in json file.");
+		}
 		name_ = j["name"].get<std::string>();
+
+		if(!j.count("version")){
+			throw std::runtime_error("No version set in json file.");
+		}
 		version_ = j["version"].get<std::string>();
+
 		bit_numbering_inverted_ = j.count("bit_numbering_inverted") ? j["bit_numbering_inverted"].get<bool>() : false; // TODO: should be true by default if database-backed.
 		max_message_frequency_ = j.count("max_message_frequency") ? j["max_message_frequency"].get<float>() : 0.0f;
 		raw_can_mode_ = j.count("raw_can_mode") ? j["raw_can_mode"].get<can_bus_mode>() : can_bus_mode::off;
