@@ -30,6 +30,8 @@ set(PROJECT_ICON "icon.png")
 set(PROJECT_LICENCE "APL2.0")
 set(PROJECT_LANGUAGES,"CXX")
 
+include(FindPkgConfig)
+
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES ${PROJECT_LANGUAGES})
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -38,6 +40,11 @@ set(CMP0048 1)
 if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "RELEASE")
 endif()
+
+
+pkg_check_modules(lowcan REQUIRED rp-can-low-level)
+
+include_directories("${lowcan_INCLUDEDIR}")
 
 # Static constante definition
 # -----------------------------

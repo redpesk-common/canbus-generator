@@ -136,9 +136,13 @@ namespace openxc
 		bit_size_ = j.count("bit_size") ? j["bit_size"].get<std::uint32_t>() : 0;
 		factor_ = j.count("factor") ? j["factor"].get<float>() : 1.0f;
 		offset_ = j.count("offset") ? j["offset"].get<float>() : 0.0f;
-		value_to_match_ = j.count("value_to_match") ? j["value_to_match"].get<float>() : -1.0f;
-		min_value_ = j.count("min_value") ? j["max_value"].get<float>() : 0;
-		max_value_ = j.count("max_value") ? j["max_value"].get<float>() : 0;
+		value_to_match_ = j.count("value_to_match") ? j["value_to_match"].get<float>() : std::nanf("");
+		min_value_ = j.count("min_value") ? j["min_value"].get<float>() : std::nanf("");
+		max_value_ = j.count("max_value") ? j["max_value"].get<float>() : std::nanf("");
+		if(!isnanf(value_to_match_) && ( !isnanf(min_value_) || !isnanf(max_value_)))
+		{
+			std::cout <<"WARNING: value_to_match and min/max_value cannot be set together. min/max_value(s) have been overridden \n";
+		}
 		decoder_ = j.count("decoder") ? j["decoder"].get<std::string>() : "";
 		ignore_ = j.count("ignore") ? j["ignore"].get<bool>() : false;
 		enabled_ = j.count("enabled") ? j["enabled"].get<bool>() : true;

@@ -163,32 +163,31 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.offset()) << ",// offset\n";
 
-		float min_value = std::nanf("");
-		float max_value = std::nanf("");
-		if(v.v_.min_value() != 0 || v.v_.max_value() != 0 || v.v_.value_to_match() != -1)
+		float min_value = v.v_.min_value();
+		float max_value = v.v_.max_value();
+
+		if( !isnanf(v.v_.value_to_match()))
 		{
-			if(v.v_.min_value() != 0)
-			{
-				min_value == v.v_.min_value();
-			}
+			min_value = v.v_.value_to_match();
+			max_value = v.v_.value_to_match();
+		}
 
-			if(v.v_.max_value() != 0)
-			{
-				max_value == v.v_.max_value();
-			}
-
-			if(v.v_.value_to_match() != -1)
-			{
-				min_value = v.v_.value_to_match();
-				max_value = v.v_.value_to_match();
-			}
-			o << v.line_prefix_ << "\t" << gen(min_value) << ",// min_value\n"
-			<< v.line_prefix_ << "\t" << gen(max_value) <<",// max_value\n";
+		if( !isnanf(min_value))
+		{
+			o << v.line_prefix_ << "\t" << gen(min_value) << ",// min_value\n";
 		}
 		else
 		{
-			o << v.line_prefix_ << "\t" << "std::nanf(\"\")" << ",// min_value\n"
-			<< v.line_prefix_ << "\t" << "std::nanf(\"\")" <<",// max_value\n";
+			o << v.line_prefix_ << "\t" << "std::nanf(\"\")" << ",// min_value\n";
+		}
+
+		if( !isnanf(max_value))
+		{
+			o << v.line_prefix_ << "\t" << gen(max_value) <<",// max_value\n";
+		}
+		else
+		{
+			o << v.line_prefix_ << "\t" << "std::nanf(\"\")" <<",// max_value\n";
 		}
 
 
