@@ -27,7 +27,7 @@
 #include <iterator>
 #include <json.hpp>
 #include <algorithm>
-#include <low-can/can-message.hpp>
+#include <low-can/can/message/message.hpp>
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
 #include "converter.hpp"
