@@ -17,7 +17,7 @@ BUILD_DIR   := build
 
 .PHONY: all clean mrproper ${BUILD_DIR}/Makefile
 
-all: build package
+all: build 
 
 clean:
 	@([ -d ${BUILD_DIR} ] && make -C ${BUILD_DIR} clean) || echo Nothing to clean
@@ -27,10 +27,6 @@ mrproper:
 
 build:  ${BUILD_DIR}/Makefile
 	cmake --build ${BUILD_DIR} --clean-first
-
-
-package:
-	cmake --build ${BUILD_DIR} --target widget
 
 ${BUILD_DIR}/Makefile:
 	@[ -d ${BUILD_DIR} ] || mkdir -p ${BUILD_DIR}
