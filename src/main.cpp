@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
 		std::string header_file;
 		std::string footer_file;
 
-		char tmp;
+		int tmp;
 		/*if the program is ran witout options ,it will show the usgage and exit*/
 		if(argc == 1)
 		{
@@ -400,9 +400,9 @@ int main(int argc, char *argv[])
 		/*use function getopt to get the arguments with option."hu:p:s:v" indicate
 		that option h,v are the options without arguments while u,p,s are the
 		options with arguments*/
-		while((tmp=(char)getopt(argc,argv,"m:h:f:o:"))!=-1)
+		while((tmp=getopt(argc,argv,"m:h:f:o:"))!=-1)
 		{
-			switch(tmp)
+			switch((char)tmp)
 			{
 			case 'h':
 				header_file = optarg;
