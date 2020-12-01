@@ -42,7 +42,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 
-pkg_check_modules(lowcan REQUIRED rp-can-low-level)
+pkg_check_modules(lowcan REQUIRED canbus-binding)
 
 include_directories("${lowcan_INCLUDEDIR}")
 
