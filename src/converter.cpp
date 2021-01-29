@@ -30,7 +30,7 @@
  */
 uint32_t converter_t::bit_position_swap(unsigned int msg_length, unsigned int bit_position, unsigned int bit_size)
 {
-	return (msg_length * CHAR_BIT) - bit_position - bit_size;
+	return ((bit_position / 8) * 8) + (7 - bit_position % 8);
 }
 
 /**
