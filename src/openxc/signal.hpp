@@ -21,7 +21,7 @@ namespace openxc
 	{
 	private:
 		std::string											id_;
-		std::string											generic_name_;
+		std::string											name_;
 		std::uint32_t										bit_position_;
 		bool 												bit_position_edited_;
 		std::uint32_t										bit_size_;
@@ -47,7 +47,7 @@ namespace openxc
 	public:
 		std::string id() const;
 		void id(const std::string& id);
-		std::string generic_name() const;
+		std::string name() const;
 		std::uint32_t bit_position() const;
 		bool bit_position_edited() const;
 		std::uint32_t bit_size() const;

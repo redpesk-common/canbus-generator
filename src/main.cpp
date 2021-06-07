@@ -157,7 +157,7 @@ template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 {
 	o	<< v.line_prefix_ << "{std::make_shared<signal_t> (signal_t{\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.generic_name()) << ",// generic_name\n"
+		<< v.line_prefix_ << "\t" << gen(v.v_.name()) << ",// name\n"
 		<< v.line_prefix_ << "\t" << v.v_.bit_position() << ",// bit_position" << (v.v_.bit_position_edited() ? " edited with low-can-generator\n" : "\n");
 	o	<< v.line_prefix_ << "\t" << v.v_.bit_size() << ",// bit_size\n"
 		<< v.line_prefix_ << "\t" << gen(v.v_.factor()) << ",// factor\n"

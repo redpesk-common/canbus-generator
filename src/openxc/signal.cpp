@@ -14,9 +14,9 @@ namespace openxc
 
 	void id(const std::string& id);
 
-	std::string signal::generic_name() const
+	std::string signal::name() const
 	{
-		return generic_name_;
+		return name_;
 	}
 
 	std::uint32_t signal::bit_position() const
@@ -130,7 +130,7 @@ namespace openxc
 
 	void signal::from_json(const nlohmann::json& j)
 	{
-		generic_name_ = j.count("generic_name") ? j["generic_name"].get<std::string>() : "";
+		name_ = j.count("name") ? j["name"].get<std::string>() : "";
 		bit_position_ = j.count("bit_position") ? j["bit_position"].get<std::uint32_t>() : 0;
 		bit_position_edited_ = false;
 		bit_size_ = j.count("bit_size") ? j["bit_size"].get<std::uint32_t>() : 0;
@@ -188,7 +188,7 @@ namespace openxc
 	nlohmann::json signal::to_json() const
 	{
 		nlohmann::json j;
-		j["generic_name"] = generic_name_;
+		j["name"] = name_;
 		j["bit_position"] = bit_position_;
 		j["bit_size"] = bit_size_;
 		j["factor"] = factor_;
