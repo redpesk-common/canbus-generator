@@ -26,25 +26,25 @@
       "bus": "can0",
       "signals": {
         "StrAnglAct": {
-          "generic_name": "SteeringWheelAngle",
+          "name": "SteeringWheelAngle",
           "bit_position": 52,
           "bit_size": 12,
           "factor": 0.15392,
           "offset": 0
         },
         "StrAnglSign": {
-          "generic_name": "steering_angle_sign",
+          "name": "steering_angle_sign",
           "bit_position": 52,
           "bit_size": 12
         },
         "EngSpd": {
-          "generic_name": "engine_speed",
+          "name": "engine_speed",
           "max_frequency": 15,
           "bit_position": 12,
           "bit_size": 8
         },
         "GrshftPos": {
-          "generic_name": "GearshiftPosition",
+          "name": "GearshiftPosition",
           "bit_position": 41,
           "bit_size": 3,
           "states": {
@@ -57,7 +57,7 @@
           }
         },
         "StrAnglErr": {
-          "generic_name": "steering_wheel_angle_error",
+          "name": "steering_wheel_angle_error",
           "bit_position": 44,
           "bit_size": 12
         }
@@ -69,14 +69,14 @@
       "bus": "can0",
       "signals": {
         "ABC": {
-          "generic_name": "abc",
+          "name": "abc",
           "bit_position": 52,
           "bit_size": 12,
           "factor": 0.15392,
           "offset": 0
         },
         "DEF": {
-          "generic_name": "def",
+          "name": "def",
           "decoder": "decoder_t::ignoreDecoder",
           "bit_position": 52,
           "bit_size": 12
