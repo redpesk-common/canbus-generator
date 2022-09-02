@@ -22,6 +22,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <numeric>
 #include <iterator>

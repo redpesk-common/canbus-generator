@@ -1,3 +1,4 @@
+#include <iostream>
 #include "signal.hpp"
 
 namespace openxc
