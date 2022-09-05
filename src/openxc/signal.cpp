@@ -119,8 +119,14 @@ namespace openxc
 		return bit_sign_position_;
 	}
 
-	std::string signal::unit() const{
+	std::string signal::unit() const
+	{
 		return unit_;
+	}
+
+	byte_order_t signal::byte_order() const
+	{
+		return byte_order_;
 	}
 
 	void signal::set_bit_position(std::uint32_t new_bit_position)
@@ -173,8 +179,10 @@ namespace openxc
 		signed_ = j.count("sign") ? static_cast<sign_t>(j["sign"].get<std::uint32_t>()) : sign_t::UNSIGNED;
 		bit_sign_position_ = j.count("bit_sign_position") ? j["bit_sign_position"].get<std::int32_t>() : -1;
 		unit_ = j.count("unit") ? j["unit"].get<std::string>() : "";
-
-
+		byte_order_ = !j.count("byte_order") ? Unset_Endian
+				: j["byte_order"].get<std::string>() == "big_endian" ? Big_Endian
+				: j["byte_order"].get<std::string>() == "little_endian" ? Little_Endian
+				: Unset_Endian; // THROW SOME ERROR?
 
 		if (j.count("states"))
 		{
@@ -226,6 +234,8 @@ namespace openxc
 		j["signed"] = signed_;
 		j["bit_sign_position"] = bit_sign_position_;
 		j["unit"] = unit_;
+		if (byte_order_ != Unset_Endian)
+			j["byte_order"] = byte_order_ == Big_Endian ? "big_endian" : "little_endian";
 		return j;
 	}
 

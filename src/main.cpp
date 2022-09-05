@@ -117,6 +117,13 @@ std::ostream& operator<<(std::ostream& o, const generator<std::vector<T>>& v)
 }
 
 template <>
+std::ostream& operator<<(std::ostream& o, const generator<openxc::byte_order_t>& v)
+{
+	o << v.line_prefix_ << (v.v_ == openxc::Big_Endian ? "BigEndian" : "LittleEndian");
+	return o;
+}
+
+template <>
 std::ostream& operator<<(std::ostream& o, const generator<openxc::message_set>& v)
 {
 	o	<< v.line_prefix_
@@ -211,9 +218,15 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		std::string multi = "std::make_pair<bool, int>(" + multi_first + ", " + std::to_string(v.v_.multiplex().second) + ")";
 	o	<< v.line_prefix_ << '\t' << multi << ",// multiplex\n"
 		<< v.line_prefix_ << '\t' << "static_cast<sign_t>(" << gen(v.v_.sign()) << ")" << ",// signed\n"
-		<< v.line_prefix_ << "\t" << v.v_.bit_sign_position() << ",// bit_sign_position\n"
-		<< v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n"
-		<< v.line_prefix_ << "})}";
+		<< v.line_prefix_ << "\t" << v.v_.bit_sign_position() << ",// bit_sign_position\n";
+	if (v.v_.byte_order() == openxc::Unset_Endian)
+		o << v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n";
+	else {
+		o << v.line_prefix_ << "\t" << gen(v.v_.unit()) << ",// unit\n"
+		  << v.line_prefix_ << "\t" << "nullptr,// permission\n"
+		  << v.line_prefix_ << "\t" << gen(v.v_.byte_order()) << "// byte_order\n";
+	}
+	o	<< v.line_prefix_ << "})}";
 	return o;
 }
 

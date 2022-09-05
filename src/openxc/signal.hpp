@@ -17,6 +17,13 @@ namespace openxc
 		SIGN_BIT_EXTERN = 4,
 	};
 
+	enum byte_order_t
+	{
+		Unset_Endian,
+		Big_Endian,
+		Little_Endian
+	};
+
 	class signal
 	{
 	private:
@@ -43,6 +50,7 @@ namespace openxc
 		sign_t												signed_;
 		std::int32_t										bit_sign_position_;
 		std::string											unit_;
+		byte_order_t										byte_order_;
 
 	public:
 		std::string id() const;
@@ -69,6 +77,7 @@ namespace openxc
 		sign_t sign() const;
 		std::int32_t bit_sign_position() const;
 		std::string unit() const;
+		byte_order_t byte_order() const;
 
 		void set_bit_position(std::uint32_t new_bit_position);
 
