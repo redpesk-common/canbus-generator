@@ -19,7 +19,7 @@
 # Project Info
 # ------------------
 set(PROJECT_NAME can-config-generator)
-set(PROJECT_VERSION "1.5")
+set(PROJECT_VERSION "1.6")
 set(PROJECT_PRETTY_NAME "CAN configuration generator")
 set(PROJECT_DESCRIPTION "Generator that convert JSON file following OpenXC spec to configuration-generated.cpp file for the low level CAN binding.")
 set(PROJECT_URL "https://gerrit.automotivelinux.org/gerrit/src/low-level-can-generator")
