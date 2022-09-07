@@ -223,7 +223,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::signal>& v)
 		o << v.line_prefix_ << "\t" << gen(v.v_.unit()) << "// unit\n";
 	else {
 		o << v.line_prefix_ << "\t" << gen(v.v_.unit()) << ",// unit\n"
-		  << v.line_prefix_ << "\t" << "nullptr,// permission\n"
+		  << v.line_prefix_ << "\t" << "\"\",// permission\n"
 		  << v.line_prefix_ << "\t" << gen(v.v_.byte_order()) << "// byte_order\n";
 	}
 	o	<< v.line_prefix_ << "})}";
