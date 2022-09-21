@@ -137,7 +137,20 @@ namespace openxc
 
 	void signal::from_json(const nlohmann::json& j)
 	{
-		name_ = j.count("name") ? j["name"].get<std::string>() : "";
+		bool has_name = j.count("name") > 0;
+		bool has_generic_name = j.count("generic_name") > 0;
+		if (has_name)
+			name_ = j["name"].get<std::string>();
+		else if (has_generic_name)
+		{
+			name_ = j["generic_name"].get<std::string>();
+			std::cout << "WARNING: signal name is missing, using generic_name " << name_ << "\n";
+		}
+		else
+		{
+			std::cout <<"ERROR: signal name is missing\n";
+			name_ = "?";
+		}
 		bit_position_ = j.count("bit_position") ? j["bit_position"].get<std::uint32_t>() : 0;
 		bit_position_edited_ = false;
 		bit_size_ = j.count("bit_size") ? j["bit_size"].get<std::uint32_t>() : 0;
