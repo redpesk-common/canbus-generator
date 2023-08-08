@@ -28,7 +28,9 @@
 #include <iterator>
 #include <json.hpp>
 #include <algorithm>
-#include <low-can/can/message/message.hpp>
+#include <cstdint>
+
+#include <canbus-binding/can/message/message.hpp>
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
 #include "converter.hpp"
@@ -301,7 +303,7 @@ std::ostream& operator<<(std::ostream& o, const generator<openxc::diagnostic_mes
 /// @param[in] footer Content to be inserted as a footer.
 /// @param[in] message_set application read from the json file.
 /// @param[in] out Stream to write on.
-void generate(const std::string& header, const std::string& footer, const openxc::message_set& message_set, std::ostream& out)
+void generate_v3(const std::string& header, const std::string& footer, const openxc::message_set& message_set, std::ostream& out)
 {
 	std::string plugin_name = message_set.name();
 	std::for_each(plugin_name.begin(), plugin_name.end(), [](char & c){
@@ -335,6 +337,39 @@ void generate(const std::string& header, const std::string& footer, const openxc
 	out << footer << std::endl;
 
 	out << "}\n";
+}
+
+/// @brief Generate the application code.
+/// @param[in] header Content to be inserted as a header.
+/// @param[in] footer Content to be inserted as a footer.
+/// @param[in] message_set application read from the json file.
+/// @param[in] out Stream to write on.
+void generate_v4(const std::string& header, const std::string& footer, const openxc::message_set& message_set, std::ostream& out)
+{
+	std::string plugin_name = message_set.name();
+	std::for_each(plugin_name.begin(), plugin_name.end(), [](char & c){
+		c = (char) std::tolower(c);
+	});
+	std::replace(plugin_name.begin(), plugin_name.end(), ' ', '-');
+	out << "#include <canbus-binding/binding/application.hpp>\n"
+		"#include <canbus-binding/can/can-decoder.hpp>\n"
+		"#include <canbus-binding/can/can-encoder.hpp>\n"
+		"\n"
+	    << header
+	    << "\n"
+	    << gen(message_set, "")
+	    << "\n"
+		"#include <canbus-binding/binding/plugin.hpp>\n"
+		"\n"
+		"static int init(application_t &app) {\n"
+		"\treturn app.add_message_set(cms);\n"
+		"}\n"
+		"\n"
+		"CANBUS_PLUGIN_DECLARE(\"" << plugin_name << "\", init);\n"
+		"\n"
+	    << decoder_t::apply_patch()
+	    << footer
+	    << "\n";
 }
 
 /// @brief Read whole file content to a string.
@@ -381,11 +416,13 @@ nlohmann::json read_json(const std::string& file)
 // function that show the help information
 void showhelpinfo(char *s)
 {
-std::cout<<"Usage:   "<<s<<" <-m inpout.json> [-o application-generated.cpp]"<< std::endl;
-std::cout<<"option:  "<<"-m  input.json : JSON file describing CAN messages and signals"<< std::endl;
+std::cout<<"Usage:   "<<s<<" <-m input.json> [-o application-generated.cpp]"<< std::endl;
+std::cout<<"option:  "<<"-m input.json : JSON file describing CAN messages and signals"<< std::endl;
 std::cout<<"         "<<"-h header.cpp : header source file insert at the beginning of generated file"<< std::endl;
 std::cout<<"         "<<"-f footer.cpp : footer source file append to generated file."<< std::endl;
 std::cout<<"         "<<"-o application-generated.cpp : output source file. Name has to be application-generated.cpp"<< std::endl;
+std::cout<<"         "<<"-3  : generate for bindings version 3 and low-can"<< std::endl;
+std::cout<<"         "<<"-4  : generate for bindings version 4 and canbus-binding"<< std::endl;
 }
 
 /// @brief Entry point.
@@ -403,6 +440,7 @@ int main(int argc, char *argv[])
 		std::string output_file;
 		std::string header_file;
 		std::string footer_file;
+		bool v4 = false;
 
 		int tmp;
 		/*if the program is ran witout options ,it will show the usgage and exit*/
@@ -414,7 +452,7 @@ int main(int argc, char *argv[])
 		/*use function getopt to get the arguments with option."hu:p:s:v" indicate
 		that option h,v are the options without arguments while u,p,s are the
 		options with arguments*/
-		while((tmp=getopt(argc,argv,"m:h:f:o:"))!=-1)
+		while((tmp=getopt(argc,argv,"m:h:f:o:34"))!=-1)
 		{
 			switch((char)tmp)
 			{
@@ -429,6 +467,12 @@ int main(int argc, char *argv[])
 				break;
 			case 'o':
 				output_file = optarg;
+				break;
+			case '3':
+				v4 = false;
+				break;
+			case '4':
+				v4 = true;
 				break;
 			default:
 				showhelpinfo(argv[0]);
@@ -463,7 +507,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		VERSION_FILE = message_set.version();
-		generate(header.str(), footer, message_set, output_file.size() ? out : std::cout);
+		(v4 ? generate_v4 : generate_v3)(header.str(), footer, message_set, output_file.size() ? out : std::cout);
 	}
 	catch (std::exception& e)
 	{

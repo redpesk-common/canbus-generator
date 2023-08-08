@@ -16,6 +16,7 @@
  */
 
 #include <iomanip>
+#include <cstdint>
 
 class converter_t
 {
