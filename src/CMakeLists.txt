@@ -16,11 +16,8 @@
 # limitations under the License.
 ###########################################################################
 
-# Add target to project dependency list
-set(TARGET_NAME can-config-generator)
-
 # Define project Targets
-add_executable(${TARGET_NAME}
+add_executable(can-config-generator
 	converter.cpp
 	main.cpp
 	openxc/message_set.cpp
@@ -33,20 +30,10 @@ add_executable(${TARGET_NAME}
 	openxc/decoder.cpp
 	)
 
-TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}
+target_include_directories(can-config-generator
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/json
 )
 
-# Library dependencies (include updates automatically)
-TARGET_LINK_LIBRARIES(${TARGET_NAME}
-	${link_libraries}
-)
-
 # installation directory
-INSTALL(TARGETS ${TARGET_NAME}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS can-config-generator DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-# Print a helper message when every thing is finished
-# ----------------------------------------------------
-set(CLOSING_MESSAGE "Test with: ./src/can-config-generator -m ../tests/basic.json -o application-generated.cpp")

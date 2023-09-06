@@ -17,9 +17,19 @@
 ###########################################################################
 
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
-include(GNUInstallDirs)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/conf.d/config.cmake)
+project(can-config-generator
+        VERSION 2.0.0
+        DESCRIPTION "Generator that convert JSON file following OpenXC spec to configuration-generated.cpp file for the low level CAN binding."
+        HOMEPAGE_URL https://github.com/redpesk-common/canbus-generator
+        LANGUAGES CXX)
+
+include(GNUInstallDirs)
+include(FindPkgConfig)
+
+pkg_check_modules(canbus REQUIRED canbus-binding>=1.1)
+include_directories("${canbus_INCLUDEDIR}")
 
 add_subdirectory(src)
+
