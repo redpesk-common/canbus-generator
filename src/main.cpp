@@ -1,7 +1,6 @@
 /*
- * Copyright (C) 2015, 2016 "IoT.bzh"
- * Author "Loïc Collignon" <loic.collignon@iot.bzh>
- * Author "Romain Forlot" <romain.forlot@iot.bzh>
+ * Copyright 2015-2023 IoT.bzh
+ * Author: "IoT.bzh dev-team" <team@iot.bzh>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
