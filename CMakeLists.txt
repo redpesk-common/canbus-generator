@@ -29,6 +29,11 @@ include(GNUInstallDirs)
 include(FindPkgConfig)
 
 pkg_check_modules(canbus REQUIRED canbus-binding>=1.1)
+if(canbus_VERSION VERSION_GREATER_EQUAL 2)
+add_compile_definitions(CANBUS_VERSION=2)
+else()
+add_compile_definitions(CANBUS_VERSION=1)
+endif()
 include_directories("${canbus_INCLUDEDIR}")
 
 add_subdirectory(src)

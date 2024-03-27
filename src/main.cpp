@@ -29,7 +29,12 @@
 #include <algorithm>
 #include <cstdint>
 
+#if CANBUS_VERSION == 1
+#include <low-can/can/message/message.hpp>
+#else
 #include <canbus-binding/can/message/message.hpp>
+#endif
+
 #include "openxc/message_set.hpp"
 #include "openxc/decoder.hpp"
 #include "converter.hpp"
