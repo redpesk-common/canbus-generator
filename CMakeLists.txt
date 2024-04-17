@@ -20,7 +20,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
 
 project(can-config-generator
-        VERSION 2.0.0
+        VERSION 2.0.1
         DESCRIPTION "Generator that convert JSON file following OpenXC spec to configuration-generated.cpp file for the low level CAN binding."
         HOMEPAGE_URL https://github.com/redpesk-common/canbus-generator
         LANGUAGES CXX)
